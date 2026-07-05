@@ -1,3 +1,44 @@
+//TC-O(n log n)
+//SC-O(n)
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) { //O(n)
+            return false;
+        }
+        char[] s1 = s.toCharArray(); //O(n)
+        char[] s2 = t.toCharArray(); //O(n)
+        Arrays.sort(s1); //O(n log n)
+        Arrays.sort(s2); //O(n log n)
+        return Arrays.equals(s1, s2); //O(n)
+    }
+}
+
+//TC-O(n)
+//SC-O(k)  k = number of distinct characters
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+        Map<Character, Integer> map = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        for (char c : t.toCharArray()) {
+            Integer count = map.get(c);
+            if (count == null) {
+                return false;
+            }
+            if (count == 1) {
+                map.remove(c);
+            } else {
+                map.put(c, count - 1);
+            }
+        }
+        return map.isEmpty();
+    }
+}
+
 //TC-O(n)
 //SC-O(1)
 class Solution {
@@ -17,3 +58,84 @@ class Solution {
         return true;
     }
 }
+Summary
+Solution	Time	Space
+Sorting	O(n log n)	O(n)
+HashMap	O(n)	O(k), worst case O(n)
+Frequency Array	O(n)	O(1)
+
+Only the HashMap solution needs a small correction.
+
+Which Solution Should You Discuss?
+
+This is where interview strategy matters.
+
+Option 1: Start with Sorting
+
+If you immediately see the optimal solution, don't spend 10 minutes explaining sorting.
+
+A brief mention is enough:
+
+"A straightforward solution is to sort both strings and compare them. That takes O(n log n) time and O(n) extra space because of the character arrays. I think we can do better using frequency counting."
+
+This shows that you considered a simpler baseline before optimizing.
+
+Option 2: Move to HashMap
+
+Next, explain:
+
+"We can count the frequency of every character in the first string and decrement the counts while scanning the second string. If a character is missing or its count goes below zero, the strings are not anagrams."
+
+This demonstrates the key idea behind the optimal algorithm for arbitrary character sets.
+
+Then mention:
+
+"This runs in O(n) time with O(k) extra space, where k is the number of distinct characters."
+
+Option 3: Optimize Further
+
+Finally, if the interviewer says:
+
+"The strings contain only lowercase English letters."
+
+Now say:
+
+"Since the character set is fixed, we don't need a HashMap. We can replace it with an int[26] frequency array."
+
+This is the optimal solution under the given constraints.
+
+What I'd Expect from a 5-Year Java Developer
+
+If I asked Valid Anagram in an interview, the ideal flow would be:
+
+1. Clarify assumptions
+
+"Are the strings guaranteed to contain only lowercase English letters?"
+
+If the interviewer says:
+
+Yes
+
+Go directly to the frequency array solution.
+
+If they say:
+
+No
+
+Go directly to the HashMap solution.
+
+Then add:
+
+"If the character set were restricted to lowercase English letters, I'd replace the HashMap with an int[26] to reduce the space from O(k) to O(1)."
+
+This shows adaptability and awareness of constraints.
+
+My Recommendation for You
+
+For your interview preparation notebook, document all three solutions in this order:
+
+Sorting — Easy baseline, O(n log n), O(n).
+HashMap — General-purpose solution, O(n), O(k) (worst case O(n)), works for arbitrary characters.
+Frequency Array — Best solution when the alphabet is fixed, O(n), O(1).
+
+That progression demonstrates both problem-solving evolution and the ability to choose the right data structure based on the problem constraints—exactly what interviewers want to see.
