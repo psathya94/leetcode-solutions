@@ -1,0 +1,59 @@
+//TC - O(1)
+//SC - O(1)
+class MyHashSet {
+    private boolean[][] hashSet;
+    private int primaryBucket;
+    private int secondaryBucket;
+
+    public MyHashSet() {
+        this.primaryBucket = 1000;
+        this.secondaryBucket = 1000;
+        this.hashSet = new boolean[primaryBucket][];
+    }
+
+    public void add(int key) {
+        int primaryIndex = hash1(key);
+        if(hashSet[primaryIndex] == null){
+            if(primaryIndex==0)
+                hashSet[primaryIndex] = new boolean[secondaryBucket+1]; // this is to accomodate the last element 1000000 in the given range
+            else
+            hashSet[primaryIndex] = new boolean[secondaryBucket];
+        }
+        int secondaryIndex = hash2(key);
+        hashSet[primaryIndex][secondaryIndex]= true;
+    }
+
+    public int hash1(int key) {
+        return key % primaryBucket;
+    }
+
+    public int hash2(int key) {
+        return key/secondaryBucket;
+    }
+
+    public void remove(int key) {
+        int primaryIndex = hash1(key);
+        if(hashSet[primaryIndex] == null){
+            return;
+        }
+        int secondaryIndex = hash2(key);
+        hashSet[primaryIndex][secondaryIndex]= false;
+    }
+
+    public boolean contains(int key) {
+        int primaryIndex = hash1(key);
+        if(hashSet[primaryIndex] == null){
+            return false;
+        }
+        int secondaryIndex = hash2(key);
+        return hashSet[primaryIndex][secondaryIndex];
+    }
+}
+
+/**
+ * Your MyHashSet object will be instantiated and called as such:
+ * MyHashSet obj = new MyHashSet();
+ * obj.add(key);
+ * obj.remove(key);
+ * boolean param_3 = obj.contains(key);
+ */
