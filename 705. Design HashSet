@@ -17,7 +17,7 @@ class MyHashSet {
             if(primaryIndex==0)
                 hashSet[primaryIndex] = new boolean[secondaryBucket+1]; // this is to accomodate the last element 1000000 in the given range
             else
-            hashSet[primaryIndex] = new boolean[secondaryBucket];
+            hashSet[primaryIndex] = new boolean[secondaryBucket]; //LAZY ALLOCATION
         }
         int secondaryIndex = hash2(key);
         hashSet[primaryIndex][secondaryIndex]= true;
