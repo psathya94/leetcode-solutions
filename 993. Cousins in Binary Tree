@@ -1,0 +1,51 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ // TC - O(n)
+// SC - O(h)
+class Solution {
+    private int parentX = -1;
+    private int parentY = -1;
+
+    private int levelX = -1;
+    private int levelY = -1;
+
+    public boolean isCousins(TreeNode root, int x, int y) {
+        dfs(root, x, y, -1, 0);
+        return levelX == levelY && parentX != parentY;
+
+    }
+
+    private void dfs(TreeNode root, int x, int y, int parent, int level) {
+        //base
+        if (root == null)
+            return;
+        //early exit
+        if (parentX != -1 && parentY != -1)
+            return;
+        //logic
+        if (root.val == x) {
+            parentX = parent;
+            levelX = level;
+        }
+        if (root.val == y) {
+            parentY = parent;
+            levelY = level;
+        }
+        //navigation
+        dfs(root.left, x, y, root.val, level + 1);
+        dfs(root.right, x, y, root.val, level + 1);
+    }
+}
