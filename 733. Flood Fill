@@ -1,0 +1,204 @@
+//TC-O(m*n)
+//SC-O(m*n)
+/**
+Time Complexity: O(m × n) because every cell is visited at most once.
+Auxiliary Space: O(m × n) in the worst case if the entire image is one connected component, because the recursion stack can grow to the number of visited cells. If the connected region is smaller, the recursion depth is smaller. */
+class Solution {
+    int[][] directions = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
+    int original_color;
+
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        original_color = image[sr][sc];
+        if (image[sr][sc] != color)
+            dfs(image, sr, sc, color);
+        return image;
+    }
+
+    private void dfs(int[][] image, int r, int c, int color) {
+        //base condition
+        if (r < 0 || c < 0 || r == image.length || c == image[0].length)
+            return;
+        if (image[r][c] != original_color)
+            return;
+        //logic
+        image[r][c] = color;
+
+        //navigation
+        dfs(image, r + 1, c + 0, color);
+        dfs(image, r + 0, c + 1, color);
+        dfs(image, r - 1, c + 0, color);
+        dfs(image, r + 0, c - 1, color);
+        //or
+        /**
+        for (int[] dir : directions) {
+            dfs(image, r + dir[0], c + dir[1], color);
+        }
+        
+         */
+
+    }
+}
+/**
+
+**No.** In fact, for this problem, using a `visited` set would be unnecessary extra space.
+
+The trick in Flood Fill is that **the image itself acts as the visited set**.
+
+---
+
+## Why don't we need a visited set?
+
+Suppose the input is
+
+```text
+1 1 1
+1 1 0
+1 0 1
+```
+
+Start from
+
+```text
+(1,1)
+```
+
+Original color = **1**
+
+New color = **2**
+
+---
+
+### Visit the starting cell
+
+```text
+2 1 1
+1 1 0
+1 0 1
+```
+
+Notice that the starting cell is no longer `1`.
+
+It is now `2`.
+
+---
+
+### DFS visits its neighbor
+
+Suppose we go back to the previous cell.
+
+The first thing we check is
+
+```java
+if (image[r][c] != originalColor)
+    return;
+```
+
+The previous cell is now
+
+```text
+2
+```
+
+Original color is
+
+```text
+1
+```
+
+So
+
+```java
+2 != 1
+```
+
+which is true.
+
+The recursion immediately returns.
+
+So that cell is **never visited again**.
+
+---
+
+## The image itself records visited cells
+
+Initially
+
+```text
+1 1 1
+1 1 0
+1 0 1
+```
+
+After some DFS calls
+
+```text
+2 2 2
+2 2 0
+2 0 1
+```
+
+Every `2` represents:
+
+> "I've already visited this cell."
+
+So the algorithm doesn't need a separate `visited[][]`.
+
+---
+
+## What if we used a visited array?
+
+You could write
+
+```java
+boolean[][] visited = new boolean[m][n];
+```
+
+Then
+
+```java
+if (visited[r][c])
+    return;
+```
+
+and
+
+```java
+visited[r][c] = true;
+```
+
+This also works.
+
+However, the complexities become:
+
+* **Time:** O(m × n)
+* **Auxiliary Space:** O(m × n) for the `visited` array **plus** the recursion stack.
+
+Since we're already modifying the image in place, the extra array isn't needed.
+
+---
+
+## When do we need a visited set?
+
+A separate `visited` array is needed when you **cannot modify the input**.
+
+Examples include:
+
+* ✅ Number of Islands (you can either modify the grid or use `visited`)
+* ✅ Clone Graph (you must use a visited map)
+* ✅ Graph traversal (DFS/BFS)
+* ✅ Maze problems where the grid cannot be changed
+
+---
+
+## Interview Explanation
+
+If the interviewer asks:
+
+> **"Why didn't you use a visited array?"**
+
+You can answer:
+
+> "Since the problem allows me to modify the input image, I use the new color itself to mark visited cells. Once a cell is recolored, it no longer matches the original color, so future DFS calls immediately return. This avoids the need for an additional visited array and saves extra space."
+
+This is exactly the reasoning interviewers are looking for.
+ */
