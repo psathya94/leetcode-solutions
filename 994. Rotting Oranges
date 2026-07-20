@@ -1,0 +1,63 @@
+//TC-
+//SC-
+class Solution {
+    Queue<int[]> queue;
+    int count = 0;
+    int freshOrangeCount = 0;
+    int[][] directions;
+
+    public int orangesRotting(int[][] grid) {
+        queue = new LinkedList<>();
+        this.directions = new int[][] { { -1, 0 }, { 1, 0 }, { 0, 1 }, { 0, -1 } };
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 2) {
+                    queue.add(new int[] { i, j });
+                } else if (grid[i][j] == 1) {
+                    freshOrangeCount++;
+                }
+            }
+        }
+        //there are no fresh oranges and no rotting happens
+        if (freshOrangeCount == 0)
+            return 0;
+        bfs(grid, queue);
+        //check if there are no fresh oranges and return -1 if there are any
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
+                    return -1;
+                }
+            }
+        }
+        return count - 1;
+    }
+
+    private void bfs(int[][] grid, Queue queue) {
+        Set<String> set = new HashSet<>();
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            count++;
+            for (int i = 0; i < size; i++) {
+                int[] idx = (int[]) queue.poll();
+                grid[idx[0]][idx[1]] = 2; //mark it rotten
+                //new directions
+                for (int[] dir : directions) {
+                    int nr = idx[0] + dir[0];
+                    int nc = idx[1] + dir[1];
+                    if (nr < 0 || nc < 0 || nr >= grid.length || nc >= grid[0].length) {
+                        continue;
+                    }
+                    if (grid[nr][nc] == 1 && !set.contains(nr + "" + nc)) {
+                        queue.add(new int[] { nr, nc });
+                        set.add(nr + "" + nc);
+                    }
+                }
+            }
+        }
+    }
+}
+Clarifying questions
+1. Can the input array be modified?
+2. What should be returned when there are no fresh oranges in the input?
+3. What should be returned when there are no rotten oranges in the input?
