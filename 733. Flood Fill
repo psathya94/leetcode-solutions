@@ -3,6 +3,7 @@
 /**
 Time Complexity: O(m × n) because every cell is visited at most once.
 Auxiliary Space: O(m × n) in the worst case if the entire image is one connected component, because the recursion stack can grow to the number of visited cells. If the connected region is smaller, the recursion depth is smaller. */
+
 class Solution {
     int[][] directions = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
     int original_color;
