@@ -1,0 +1,57 @@
+The below solution can be improved by replacing the Hashset impl to boolean array.
+//TC-O(mn)
+//SC-O(mn)
+class Solution {
+    private Queue<int[]> queue;
+    private final int[][] directions = {
+            { 0, -1 },
+            { -1, 0 },
+            { 0, 1 },
+            { 1, 0 }
+    };
+    private Set<String> set;
+
+    public int[][] updateMatrix(int[][] mat) {
+        queue = new LinkedList<>();
+        set = new HashSet<>();
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                if (mat[i][j] == 0) {
+                    queue.offer(new int[] { i, j });
+                    set.add(i + "," + j);
+                }
+            }
+        }
+        bfs(mat);
+        return mat;
+    }
+
+    private void bfs(int[][] mat) {
+        
+        int steps = -1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            steps++;
+            System.out.println("**");
+            for (int[] array : queue) {
+            System.out.println(Arrays.toString(array));
+        }
+            for (int a = 0; a < size; a++) {
+                int[] idx = queue.poll();
+                int i = idx[0];
+                int j = idx[1];
+                mat[i][j] = steps;
+                for (int[] dir : directions) {
+                    int nr = i + dir[0];
+                    int nc = j + dir[1];
+                    if (nr < 0 || nc < 0 || nr >= mat.length || nc >= mat[0].length)
+                        continue;
+                    if (mat[nr][nc] == 1 && !set.contains(nr + "," + nc)) {
+                        queue.offer(new int[] { nr, nc });
+                        set.add(nr + "," + nc);
+                    }
+                }
+            }
+        }
+    }
+}
