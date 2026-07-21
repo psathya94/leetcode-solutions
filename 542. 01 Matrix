@@ -1,4 +1,4 @@
-The below solution can be improved by replacing the Hashset impl to boolean array.
+The below solution can be improved by replacing the Hashset impl to boolean array(Approach 2 below).
 //TC-O(mn)
 //SC-O(mn)
 class Solution {
@@ -53,5 +53,59 @@ class Solution {
                 }
             }
         }
+
+Approach 2
+//TC-O(mn)
+//SC-O(mn)
+class Solution {
+    private Queue<int[]> queue;
+    private final int[][] directions = {
+            { 0, -1 },
+            { -1, 0 },
+            { 0, 1 },
+            { 1, 0 }
+    };
+    private boolean[][] visited;
+
+    public int[][] updateMatrix(int[][] mat) {
+        queue = new LinkedList<>();
+        visited = new boolean[mat.length][mat[0].length];
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                if (mat[i][j] == 0) {
+                    queue.offer(new int[] { i, j });
+                    visited[i][j]=true;
+                }
+            }
+        }
+        bfs(mat);
+        return mat;
+    }
+
+    private void bfs(int[][] mat) {
+        
+        int steps = -1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            steps++;
+            for (int a = 0; a < size; a++) {
+                int[] idx = queue.poll();
+                int i = idx[0];
+                int j = idx[1];
+                mat[i][j] = steps;
+                for (int[] dir : directions) {
+                    int nr = i + dir[0];
+                    int nc = j + dir[1];
+                    if (nr < 0 || nc < 0 || nr >= mat.length || nc >= mat[0].length)
+                        continue;
+                    if (mat[nr][nc] == 1 && !visited[nr][nc]) {
+                        queue.offer(new int[] { nr, nc });
+                        visited[nr][nc]=true;
+                    }
+                }
+            }
+        }
+    }
+}
     }
 }
