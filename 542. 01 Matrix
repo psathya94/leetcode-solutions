@@ -53,7 +53,7 @@ class Solution {
                 }
             }
         }
-
+=============================================================================================
 Approach 2
 //TC-O(mn)
 //SC-O(mn)
@@ -107,5 +107,68 @@ class Solution {
         }
     }
 }
+    }
+}
+
+Approach 3
+Input matrix is used as a visited set by modifying the input array.
+Steps
+1. Add all 0's to queue
+2. update 1 to -1 to differentiate between the distance marked as 1 and the input given is 1
+3. add the neighbourss that has -1(which was originally 1) and mark it visited while adding to the queue. This avoids re-processing the same element.
+
+//TC-O(mn)
+//SC-O(mn)
+class Solution {
+    private Queue<int[]> queue;
+    private final int[][] directions = {
+            { 0, -1 },
+            { -1, 0 },
+            { 0, 1 },
+            { 1, 0 }
+    };
+    //private boolean[][] visited;
+
+    public int[][] updateMatrix(int[][] mat) {
+        queue = new LinkedList<>();
+        //visited = new boolean[mat.length][mat[0].length];
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                if (mat[i][j] == 0) {
+                    queue.offer(new int[] { i, j });
+                    //visited[i][j]=true;
+                }
+                if (mat[i][j] == 1) {
+                    mat[i][j] = -1;
+                }
+            }
+        }
+        bfs(mat);
+        return mat;
+    }
+
+    private void bfs(int[][] mat) {
+        
+        int steps = -1;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            steps++;
+            for (int a = 0; a < size; a++) {
+                int[] idx = queue.poll();
+                int i = idx[0];
+                int j = idx[1];
+                //mat[i][j] = steps;
+                for (int[] dir : directions) {
+                    int nr = i + dir[0];
+                    int nc = j + dir[1];
+                    if (nr < 0 || nc < 0 || nr >= mat.length || nc >= mat[0].length)
+                        continue;
+                    if (mat[nr][nc] == -1 ) {
+                        mat[nr][nc] = mat[i][j]+1; //important step. This will mark the current element as processed and ensure not added to queue again
+                        queue.offer(new int[] { nr, nc });
+                    }
+                }
+            }
+        }
     }
 }
