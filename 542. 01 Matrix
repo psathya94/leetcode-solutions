@@ -149,10 +149,10 @@ class Solution {
 
     private void bfs(int[][] mat) {
         
-        int steps = -1;
+        //int steps = -1;
         while (!queue.isEmpty()) {
             int size = queue.size();
-            steps++;
+            //steps++;
             for (int a = 0; a < size; a++) {
                 int[] idx = queue.poll();
                 int i = idx[0];
