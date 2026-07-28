@@ -1,0 +1,52 @@
+Approach 1
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ //TC- O(n^2)
+//SC- O(n^2)
+class Solution {
+    
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        //base
+        if (preorder.length == 0)
+            return null;
+        //logic
+        TreeNode root = new TreeNode(preorder[0], null, null);
+        int idx = -1;
+        //find the root in inorder array
+        for (int i = 0; i < inorder.length; i++) {
+            if (inorder[i] == root.val) {
+                idx = i;
+                break;
+            }
+        }
+        System.out.println("idx is" + idx);
+        //navigation
+        int[] inorderLeft = Arrays.copyOfRange(inorder, 0, idx);
+        int[] inorderRight = Arrays.copyOfRange(inorder, idx + 1, inorder.length);
+        int[] preorderLeft = Arrays.copyOfRange(preorder, 1, inorderLeft.length+1);
+        int[] preorderRight = Arrays.copyOfRange(preorder, inorderLeft.length + 1, preorder.length);
+        root.left = buildTree(preorderLeft,inorderLeft);
+        root.right = buildTree(preorderRight,inorderRight);
+
+        return root;
+    }
+
+    
+}
+
+========================
+Approach 2
