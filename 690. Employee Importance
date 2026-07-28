@@ -1,0 +1,32 @@
+/*
+// Definition for Employee.
+class Employee {
+    public int id;
+    public int importance;
+    public List<Integer> subordinates;
+};
+*/
+//TC-O(n)
+//SC-O(n)
+class Solution {
+    public int getImportance(List<Employee> employees, int id) {
+        //build graph
+        HashMap<Integer, Employee> graph = new HashMap<>();
+        for(Employee e: employees){
+            graph.put(e.id, e);
+        }
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(id);
+
+        int importance =0;
+        while(!q.isEmpty()){
+            int i = q.poll();
+            Employee e = graph.get(i);
+            importance+=e.importance;
+            for(int sub:e.subordinates){
+                q.offer(sub); 
+            }
+        }
+        return importance;
+    }
+}
