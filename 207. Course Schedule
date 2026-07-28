@@ -1,0 +1,40 @@
+//Time complexity is O(V + E) and space complexity is O(V + E)
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int completedCourses = 0;
+        //build graph
+        HashMap<Integer, List<Integer>> graph = new HashMap<>();
+        int[] indegree = new int[numCourses];
+        for (int[] course : prerequisites) {
+            graph.computeIfAbsent(course[1], k -> new ArrayList<>()).add(course[0]);
+            indegree[course[0]]++;
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+        //to add, find course with 0 pre-requitste
+        for (int i=0 ;i< indegree.length;i++) {
+            if (indegree[i] == 0){
+                queue.offer(i);//queue.add(i);
+                
+            }
+        }
+
+        while(!queue.isEmpty()){
+            int courseCompleted = queue.poll();
+            completedCourses++;
+
+            List<Integer> list = graph.get(courseCompleted);
+            if(list!=null){
+                for(int c: list){
+                indegree[c]--;
+                if(indegree[c]==0){
+                    queue.offer(c);//queue.add(c);
+                }
+            }
+            }
+            
+        }
+        return completedCourses==numCourses;
+
+    }
+}
