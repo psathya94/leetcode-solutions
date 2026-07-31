@@ -1,0 +1,26 @@
+//TC-O(n)
+//SC-O(1)
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int maxLength = 0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        int start = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (map.containsKey(ch)) {
+                start = Math.max(start, map.get(ch) + 1);
+            }
+            maxLength = Math.max(maxLength, i - start + 1);
+            map.put(ch, i);
+        }
+        return maxLength;
+    }
+}
+/**
+Approach
+There are two pointers. Start and i (end)
+We are trying to form a window and calculate the length of that window.
+Start will be at the first index, and I moves on every character. If that character is not present in the map, the calculate the maximum length between eye and start.
+If the character is present in the Hashmap, then the start has to be moved to skip that duplicate. The start will be moved by the previous seen index +1. To avoid moving backwards, start should be moved between math.Maks of start and the previous scene index +1.
+
+ */
