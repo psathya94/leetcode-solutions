@@ -1,0 +1,46 @@
+//TC - O(m+n)
+//SC - O(1) as p can have alphabets of size 26
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        int m = s.length();
+        int n = p.length();
+        HashMap<Character, Integer> map = new HashMap<>();
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            char ch = p.charAt(i);
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
+        int match = 0;
+        for (int i = 0; i < m; i++) {
+            //incoming character
+            char in = s.charAt(i);
+            if (map.containsKey(in)) {
+                int count = map.get(in);
+                count--;
+                map.put(in, count);
+                if (count == 0)
+                    match++;
+            }
+            //outgoing character
+            if (i >= n) {
+                char out = s.charAt(i - n);
+                if (map.containsKey(out)) {
+                    int count = map.get(out);
+                    count++;
+                    map.put(out, count);
+                    if (count == 1)
+                        match--;
+                }
+            }
+            if (match == map.size()) {
+                result.add(i - n + 1);
+            }
+        }
+        return result;
+    }
+}
+/**
+Approach
+
+I'll maintain a sliding window of size p.length(). First, I store the frequency of every character in p. As the window expands, I decrement the count for the incoming character. Once the window size exceeds p.length(), I increment the count for the outgoing character. I maintain a match variable that tracks how many distinct characters currently have a frequency of zero. Whenever match == map.size(), the current window is an anagram
+ */
