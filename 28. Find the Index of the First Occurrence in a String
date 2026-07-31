@@ -1,0 +1,25 @@
+//TC - O(nm)
+//SC - O(1)
+class Solution {
+    public int strStr(String haystack, String needle) {
+        int n = haystack.length();
+        int m = needle.length();
+        if (m > n)
+            return -1;
+        // Edge case
+        if (m == 0) {
+            return 0;
+        }
+
+        for (int i = 0; i <= n - m; i++) { //should be <=
+            int j = 0;
+            while (j < m && needle.charAt(j) == haystack.charAt(i + j)) {
+                j++;
+            }
+            if (j == m)
+                return i;
+        }
+
+        return -1;
+    }
+}
