@@ -1,0 +1,23 @@
+//TC - O(n * 2^n) n-path
+//SC - O(h)
+class Solution {
+
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        dfs(0, new ArrayList<>(), nums, result);
+        return result;
+    }
+
+    private void dfs(int index, List<Integer> path, int[] nums, List<List<Integer>> result) {
+        // Save current subset
+        result.add(new ArrayList<>(path));
+        for (int i = index; i < nums.length; i++) {
+            // Choose
+            path.add(nums[i]);
+            // Explore
+            dfs(i + 1 , path, nums, result);
+            // Undo
+            path.remove(path.size() - 1);
+        }
+    }
+}
