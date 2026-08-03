@@ -1,0 +1,45 @@
+//TC- O(M × N × 3^L) - M × N starting positions and 3 choices for each dfs call
+//SC - O(L)
+class Solution {
+    int[][] directions = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
+    int n;
+    int m;
+
+    public boolean exist(char[][] board, String word) {
+        int widx = 0;
+        m = board.length;
+        n = board[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == word.charAt(widx))
+                     if(dfs(i, j, widx, board, word)) //we need if condition check here. dont return function call directly. we return out of this loop oly when the dfs call is true, otherwise we continue exploring
+                        return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean dfs(int row, int col, int widx, char[][] board, String word) {
+        //base
+        if (widx == word.length()) { //this base condition chould come before the next one. check docs
+            return true;
+        }
+        if (row < 0 || col < 0 || row == m || col == n || board[row][col] == '#')
+            return false;
+        
+
+        //logic
+        //choose, explore, undo
+        if (board[row][col] == word.charAt(widx)) {
+            board[row][col] = '#'; //mark cell visited to avoid reusing the same character in the word
+            for (int[] dir : directions) {
+                int nr = row + dir[0];
+                int nc = col + dir[1];
+                 if(dfs(nr, nc, widx + 1, board, word)) //we try 4 directions - up,dow, left, right. Suppose dfs returns false, we need to continue the for loop. we exit the for loop only when true is returned for any dfs call(character matched)
+                    return true;
+            }
+            board[row][col] = word.charAt(widx);
+        }
+        return false;
+    }
+}
