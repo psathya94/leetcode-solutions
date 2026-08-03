@@ -1,5 +1,5 @@
-//TC - n!
-//SC-O(m*n)
+//TC - O(n* n!)
+//SC-O(n^2)
 class Solution {
     boolean[][] board;
     List<List<String>> result;
