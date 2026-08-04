@@ -1,0 +1,38 @@
+ //TC - O(n*4^n) - new string at every recursive call + 4 choices
+//SC-O(n^2) auxilary space + new string at every recursive call
+class Solution {
+    List<String> result;
+
+    public List<String> addOperators(String num, int target) {
+        result = new ArrayList<>();
+        dfs(0, num, target, 0, 0, "");
+        return result;
+    }
+
+    private void dfs(int index, String num, int target, long calc, long tail, String path) {
+        //base
+        if (index == num.length()) {
+            if (calc == target) {
+                result.add(path);
+            }
+            return;
+        }
+        //logic
+        //generate subsets
+        for (int i = index; i < num.length(); i++) {
+            String s = num.substring(index, i + 1);
+            if (s.startsWith("0") && index != i)
+                break;
+            long curr = Long.parseLong(s);
+            //level 1
+            if (index == 0)
+                dfs(i + 1, num, target, curr, curr, s);
+            else {
+                //from level 2 - 3 choices
+                dfs(i + 1, num, target, calc + curr, curr, path + "+" + curr);
+                dfs(i + 1, num, target, calc - curr, -curr, path + "-" + curr);
+                dfs(i + 1, num, target, calc - tail + tail * curr, tail * curr, path + "*" + curr);
+            }
+        }
+    }
+}
