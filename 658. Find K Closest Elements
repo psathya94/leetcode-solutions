@@ -1,4 +1,4 @@
-//Optimal approach - 
+//Optimal approach - Binary search
 class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
         int n = arr.length;
