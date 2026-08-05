@@ -1,0 +1,28 @@
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        int n = arr.length;
+        int i = 0;
+        int j= n-k;
+        while(i<j){
+            int mid = (i+j)/2;
+            //comapre 2 elements - mid and mid+k
+            int e1 = x-arr[mid];
+            int e2 = arr[mid+k]-x;
+            System.out.println(e1+" "+e2);
+            if(e1>e2){
+                i = mid+1;
+            }else{
+                j= mid;
+            }
+        }
+        System.out.println("i"+i);
+        List<Integer> output = new ArrayList<>();
+        int idx = i;
+        while(k>0){
+            output.add(arr[idx]);
+            idx++;
+            k--;
+        }
+        return output;
+    }
+}
