@@ -1,3 +1,4 @@
+//Optimal approach - 
 class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
         int n = arr.length;
@@ -24,5 +25,31 @@ class Solution {
             k--;
         }
         return output;
+    }
+}
+=====
+/Two pointer solution
+//TC - O(n-k)+O(k) - twp pointer and copying final output
+//SC - O(1)
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+
+        int low = 0;
+        int high = arr.length - 1;
+        while (high - low >= k) {
+            if (Math.abs(arr[high] - x) >= Math.abs(arr[low] - x))
+                high--;
+            else
+                low++;
+        }
+
+        List<Integer> list = new ArrayList<>();
+        while (k > 0) {
+            list.add(arr[low]);
+            low++;
+            k--;
+        }
+        return list;
+
     }
 }
