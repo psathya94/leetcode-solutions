@@ -29,7 +29,7 @@ class Solution {
 }
 =====
 /Two pointer solution
-//TC - O(n-k)+O(k) - twp pointer and copying final output
+//TC - O(n-k)+O(k) = O(n) two pointer and copying final output
 //SC - O(1)
 class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
@@ -51,5 +51,33 @@ class Solution {
         }
         return list;
 
+    }
+}
+
+=======
+//Priority Queue
+//TC - O(n log k)
+//SC - O(k)
+class Solution {
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        //max heap -> b-a
+        PriorityQueue<Integer> pq = new PriorityQueue<>(
+                (a, b) -> {
+                    int distA = Math.abs(a - x);
+                    int distB = Math.abs(b - x);
+                    if (distA == distB)
+                        return b - a;
+                    return distB - distA;
+                }
+        );
+        for (Integer a : arr) { //O(n)
+            pq.offer(a);
+            if (pq.size() > k) { //O(log k)
+                pq.poll();
+            }
+        }
+        List<Integer> list = new ArrayList<>(pq);
+        Collections.sort(list); //O(k log k)
+        return list;
     }
 }
