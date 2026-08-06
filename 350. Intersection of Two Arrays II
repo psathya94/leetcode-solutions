@@ -1,0 +1,77 @@
+//TC - O(m + n)
+//SC - O(min(m,n))
+
+// TC: O(m + n)
+// SC: O(min(m, n))
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+
+        // Always build the frequency map on the smaller array
+        if (nums1.length > nums2.length) {
+            return intersect(nums2, nums1);
+        }
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        // Build frequency map
+        for (int num : nums1) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        List<Integer> result = new ArrayList<>();
+
+        // Find intersection
+        for (int num : nums2) {
+            Integer count = map.get(num);
+
+            if (count != null) {
+                result.add(num);
+
+                if (count == 1) {
+                    map.remove(num);
+                } else {
+                    map.put(num, count - 1);
+                }
+            }
+        }
+
+        // Convert List<Integer> to int[]
+        return result.stream().mapToInt(i -> i).toArray();
+    }
+}
+=====================
+My style
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        
+        if(nums1.length > nums2.length){
+            return intersect(nums2,nums1);
+        }
+        List<Integer> output = new ArrayList<>();
+        int idx =0;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int i : nums1){
+            /**int c = 0;
+            if(map.containsKey(i)){
+                c = map.get(i);
+            }
+            map.put(i, c+1);
+            **/
+            map.put(i,map.getOrDefault(i,0)+1);
+        }
+        for(int i:nums2){
+            int c;
+            if(map.containsKey(i)){
+                c = map.get(i);
+                output.add(i);
+                idx++;
+                c--;
+                if(c==0)
+                    map.remove(i);
+                else
+                map.put(i, c);
+            }
+        }
+        return output.stream().mapToInt(i -> i).toArray();
+    }
+}
