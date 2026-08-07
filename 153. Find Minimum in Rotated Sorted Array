@@ -1,0 +1,21 @@
+//TC - O(log n)
+//SC - O(1)
+class Solution {
+    public int findMin(int[] nums) {
+        int low = 0;
+        int high = nums.length - 1;
+        while (low < high) { //note
+            int mid = low + (high - low) / 2;
+            if (nums[mid] > nums[high]) {
+                //not sorted, clearly the min lies in non sorted side
+                // Minimum is in the right half.
+                low = mid + 1;
+            } else {
+                // Minimum could be mid, so keep mid.
+                //high should be moved to mid not mid-1. dry run - [3,4,5,1,2]
+                high = mid; 
+            }
+        }
+        return nums[low]; //important
+    }
+}
