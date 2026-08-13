@@ -1,0 +1,40 @@
+// TC: O(n)
+// SC: O(n)
+
+class Solution {
+    public boolean isValid(String s) {
+
+        Stack<Character> stack = new Stack<>();
+
+        HashMap<Character, Character> map = new HashMap<>();
+        map.put(')', '(');
+        map.put(']', '[');
+        map.put('}', '{');
+
+        for (char c : s.toCharArray()) {
+
+            // Opening bracket
+            if (c == '(' || c == '[' || c == '{') {
+                stack.push(c);
+            }
+
+            // Closing bracket
+            else {
+                if (stack.isEmpty()) { //no closing bracket for an opening bracket. eg- s="}"
+                    return false;
+                }
+
+                if (map.get(c) != stack.pop()) { //not a valid pair
+                    return false;
+                }
+            }
+        }
+
+        return stack.isEmpty(); //eg- s:"{{{"
+    }
+}
+/**
+"}"       → closing bracket with empty stack
+"(]"      → wrong matching pair
+"((("     → unmatched opening brackets
+ */
