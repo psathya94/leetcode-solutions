@@ -1,0 +1,27 @@
+//TC - O(n)
+//SC - O(n)
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+        int n = nums.length;
+        int[] output = new int[n];
+        Arrays.fill(output, -1);
+
+        Stack<Integer> stack = new Stack<>();
+
+        for (int j = 0; j < n * 2; j++) {
+            int i = j % n;
+            int incoming = nums[i];
+            while (!stack.isEmpty() && nums[stack.peek()] < incoming) {
+                if (stack.peek() == i) //stop 
+                    break;
+                int idx = stack.pop();
+                output[idx] = incoming;
+            }
+            // Push each index only once. DOnt push during the second loop
+            if (j < n) {
+                stack.push(i);
+            }
+        }
+        return output;
+    }
+}
