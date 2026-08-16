@@ -1,0 +1,63 @@
+//Time: O(n² · 2ⁿ)
+//Space: O(n · 2ⁿ)
+/**
+2ⁿ → number of possible candidate strings
+
+n² → work to process one candidate
+      n for trying removals
+      × n for creating each new string
+       */
+class Solution {
+    public List<String> removeInvalidParentheses(String s) {
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(s);
+        Set<String> set = new HashSet<>();
+        set.add(s);
+        boolean flag = false;
+        List<String> result = new ArrayList<>();
+
+        while (!queue.isEmpty() && !flag) {
+            int size = queue.size();
+            //start bfs -- **check**
+            for (int j = 0; j < size; j++) {
+                String str = queue.poll();
+                if (isValid(str)) { //O(n)
+                    flag = true;
+                    result.add(str);
+                } else {
+                    if (!flag) {
+                        //explore the children by removing brackets
+                        for (int i = 0; i < str.length(); i++) { //O(n)
+                            char c = str.charAt(i);
+                            if (c != '(' && c != ')')
+                                continue;
+                            String baby = str.substring(0, i) + str.substring(i + 1); //new string - O(n)
+                            if (!set.contains(baby)) {
+                                queue.offer(baby);
+                                set.add(baby); //add it to the set to avoid duplicates
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        }
+        return result;
+    }
+
+    private boolean isValid(String s) {
+        int count = 0;
+        for (char c : s.toCharArray()) {
+            if (c == '(')
+                count++;
+            else if (c == ')') {
+                count--;
+                if (count < 0)
+                    return false;
+            }
+
+        }
+        return count == 0;
+    }
+}
