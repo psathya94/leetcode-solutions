@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ /**
+ Complexity
+
+Let n = number of nodes.
+
+Time: O(n)
+
+Every node is visited once.
+
+Space: O(h) for the recursion stack, where h is tree height.
+
+Balanced tree → O(log n)
+Completely skewed tree → O(n)
+
+The result list itself contains n elements, so if your interviewer asks for total space including output, it's:
+
+O(n + h) = O(n)
+  */
+class Solution {
+    List<Integer> result = new ArrayList<>();
+    public List<Integer> inorderTraversal(TreeNode root) {
+        dfs(root);
+        return result;
+    }
+    private void dfs(TreeNode root){
+        if(root==null)
+            return;
+        dfs(root.left);
+        result.add(root.val);
+        dfs(root.right);
+    }
+}
