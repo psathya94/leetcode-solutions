@@ -13,6 +13,58 @@
  *     }
  * }
  */
+//Morris Inorder
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ /**
+ Complexity
+Time: O(n)
+n is number of nodes. h is tree height. Each edge in the tree is traversed only a constant number of times, so h is ignored, so tc is O(n) and not O(nh)
+Space - O(1)
+  */
+class Solution {
+    
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        TreeNode curr = root;
+        while(curr!=null){
+            if(curr.left==null){
+                //leaf node
+                result.add(curr.val);
+                curr = curr.right; //move to root as leaf/predecessor and root is connected at this point
+            }else{
+                TreeNode pre = curr.left;
+                while(pre.right!=null && pre.right!=curr){
+                    pre = pre.right;
+                }
+                if(pre.right==null){ //first visit, so connect pre and root
+                    pre.right = curr;
+                    curr = curr.left;
+                }else{ //pre.right==curr, now destroy the connection
+                    pre.right = null;
+                    result.add(curr.val);
+                    curr = curr.right;
+                }
+            }
+        }
+        return result;
+    }
+}
+==========
+
  //TC- O(n)
  //SC-O(h) where h is the height of the tree
 class Solution {
