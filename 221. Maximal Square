@@ -1,0 +1,54 @@
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+
+        int[][] dp = new int[row + 1][col + 1];
+        int square = 0;
+
+        for (int i = row - 1; i >= 0; i--) {
+            for (int j = col - 1; j >= 0; j--) {
+
+                if (matrix[i][j] == '1') {
+                    dp[i][j] = Math.min(
+                        dp[i + 1][j],
+                        Math.min(dp[i][j + 1], dp[i + 1][j + 1])
+                    ) + 1;
+
+                    square = Math.max(square, dp[i][j]);
+                }
+            }
+        }
+
+        return square * square;
+    }
+}
+===================
+
+//same logic, diff coding style
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        int row = matrix.length; //4
+        int col = matrix[0].length; //5
+
+        int[][] dp = new int[row][col];
+        int square = 0;
+
+        for (int i = row - 1; i >= 0; i--) {
+            for (int j = col - 1; j >= 0; j--) {
+                System.out.println(i + " " + j + " " + square);
+                if (i == row - 1 || j == col - 1) {
+                    //dp[i][j] = Integer.parseInt(String.valueOf(matrix[i][j])); or
+                    dp[i][j] = matrix[i][j] - '0';
+                } else {
+                    if (matrix[i][j] == '1') {
+                        //check 3 directions
+                        dp[i][j] = Math.min(dp[i + 1][j], Math.min(dp[i + 1][j + 1], dp[i][j + 1])) + 1;
+                    }
+                }
+                square = Math.max(square, dp[i][j]); //should be outside if and else. example - [["0","1"],["1","0"]]
+            }
+        }
+        return square * square;
+    }
+}
