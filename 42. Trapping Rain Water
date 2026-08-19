@@ -1,0 +1,42 @@
+//Two pointer solution
+//Time = O(n)
+//Space = O(1)
+class Solution {
+    public int trap(int[] height) {
+        if(height==null || height.length ==0)
+            return 0;
+        int left_wall = 0;
+        int right_wall = height.length - 1;
+        int left = 0;
+        int right = height.length - 1;
+        int water = 0;
+        while (left <= right) {
+           
+            if (height[right_wall] >= height[left_wall]) {
+                //process left
+                if (height[left] >= height[left_wall]) {
+                    left_wall = left;
+
+                } else {
+                    int h = height[left_wall] - height[left];
+                    //int w = left - left_wall; no width heree
+                    water += h;
+                }
+                left++;
+            } else {
+                //process right
+                if (height[right] >= height[right_wall]) {
+                    right_wall = right;
+
+                } else {
+                     int h = height[right_wall] - height[right];
+                     //int w = right_wall - right;
+                    water += h;
+                }
+                right--;
+            }
+           
+        }
+        return water;
+    }
+}
