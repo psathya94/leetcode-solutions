@@ -19,6 +19,35 @@ class Solution {
     }
 }
 ==============================
+1d array solution
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        int row = matrix.length; //4
+        int col = matrix[0].length; //5
+
+        int[] dp = new int[col + 1];
+        int square = 0;
+
+        for (int i = row - 1; i >= 0; i--) {
+            int diag = 0;
+            for (int j = col - 1; j >= 0; j--) {
+                int temp = dp[j];
+                if (matrix[i][j] == '1') {
+                    //check 3 directions
+                    //down - dp[i + 1][j], diag - dp[i + 1][j + 1], right - 
+                    dp[j] = Math.min(dp[j],
+                            Math.min(dp[j + 1], diag)) + 1;
+                } else {
+                    dp[j] = 0;
+                }
+                diag = temp;
+                square = Math.max(square, dp[j]);
+            }
+        }
+        return square * square;
+    }
+}
+====================================
 class Solution {
     public int maximalSquare(char[][] matrix) {
         int row = matrix.length;
