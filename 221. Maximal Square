@@ -1,5 +1,26 @@
 class Solution {
     public int maximalSquare(char[][] matrix) {
+        int row = matrix.length; //4
+        int col = matrix[0].length; //5
+
+        int[][] dp = new int[row+1][col+1]; //takes care of edge case
+        int square = 0;
+
+        for (int i = row - 1; i >= 0; i--) {
+            for (int j = col - 1; j >= 0; j--) {
+                    if (matrix[i][j] == '1') {
+                        //check 3 directions
+                        dp[i][j] = Math.min(dp[i + 1][j], Math.min(dp[i + 1][j + 1], dp[i][j + 1])) + 1;
+                    }
+                square = Math.max(square, dp[i][j]);
+            }
+        }
+        return square * square;
+    }
+}
+==============================
+class Solution {
+    public int maximalSquare(char[][] matrix) {
         int row = matrix.length;
         int col = matrix[0].length;
 
