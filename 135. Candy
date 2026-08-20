@@ -1,0 +1,26 @@
+//Time:  O(n)
+//Space: O(n)
+class Solution {
+    public int candy(int[] ratings) {
+        int n = ratings.length;
+        int[] output = new int[n];
+        Arrays.fill(output,1);
+        //compare i with left
+        for(int i=1;i<n;i++){
+            if(ratings[i]>ratings[i-1]){
+                System.out.println(ratings[i]+" "+ratings[i-1]);
+                output[i] = output[i-1] + 1;
+            }
+        }
+        for(int j=n-2;j>=0;j--){
+            if(ratings[j]>ratings[j+1]){
+                output[j] = Math.max(output[j], output[j+1]+1);
+            }
+        }
+        int count =0;
+        for(int c:output){
+            count +=c;
+        }
+        return count;
+    }
+}
