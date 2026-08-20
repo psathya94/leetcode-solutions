@@ -1,3 +1,18 @@
+//TC - O(n)
+//SC - O(1)
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int n = nums.length;
+        int currSum = nums[0];
+        int max = nums[0];
+        for (int i = 1; i < n; i++) {
+            currSum = Math.max(nums[i], currSum + nums[i]);
+            max = Math.max(max, currSum);
+        }
+        return max;
+    }
+}
+=============================================
 //Below approach calculates the max sum along with the indices. We update the gstart and gend only when max changes.
 //TC - O(n)
 //SC - O(1)
@@ -11,6 +26,7 @@ class Solution {
         int currSum = nums[0]; //note
         int max = nums[0]; //note
         for (int i = 1; i < n; i++) {
+//Should I start a new subarray at i, or extend the existing subarray
             if (currSum + nums[i] < nums[i]) {
                 currSum = nums[i];
                 start = i;
