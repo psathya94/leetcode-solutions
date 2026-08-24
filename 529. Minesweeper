@@ -1,0 +1,53 @@
+//TC - O(m*n)
+//SC - O(m*n) queue space
+class Solution {
+    int[][] directions = {{-1,0},{0,1},{1,0},{0,-1},{-1,-1},{-1,1},{1,1},{1,-1}}; //O(1) space
+    public char[][] updateBoard(char[][] board, int[] click) {
+        if(board==null || board.length==0)
+            return board;
+        int row = click[0];
+        int col = click[1];
+
+        if(board[row][col]=='M')
+        {
+            board[row][col]='X';
+            return board;
+        }
+        Queue<int[]> queue = new LinkedList<>();
+        //board[row][col]='B';
+        queue.offer(click);
+
+        while(!queue.isEmpty()){
+            int[] cell = queue.poll();
+            int count = countMines(cell, board);
+            if(count==0){
+                //no adjacent mines
+                board[cell[0]][cell[1]]='B';
+                //find neighbors and add to queue. we need a visited set/use the board as visited set to avoid visiting the same cell again
+                for(int[] dir:directions){
+                    int nr = dir[0]+cell[0];
+                    int nc = dir[1]+cell[1];
+                    if(nr>=0 && nr<board.length && nc>=0 && nc<board[0].length && board[nr][nc]=='E'){
+                        queue.offer(new int[]{nr,nc});
+                        board[nr][nc]='B'; //mark it visited
+                    }
+                }
+            }else{
+                board[cell[0]][cell[1]]=(char) (count + '0'); //convert int to char
+            }
+        }
+        return board;
+
+    }
+    private int countMines(int[] cell, char[][] board){
+        int count =0;
+        for(int[] dir:directions){
+                    int nr = dir[0]+cell[0];
+                    int nc = dir[1]+cell[1];
+                    if(nr>=0 && nr<board.length && nc>=0 && nc<board[0].length && board[nr][nc]=='M'){
+                        count++;
+                    }
+        }
+        return count;
+    }
+}
