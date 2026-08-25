@@ -1,0 +1,30 @@
+//Exhaustive solution
+// TC - O(k^amount)
+// SC - O(amount) // recursion stack
+class Solution {
+    int result = Integer.MAX_VALUE;
+
+    public int coinChange(int[] coins, int amount) {
+        dfs(0, coins, amount, 0);
+        return result == Integer.MAX_VALUE ? -1 : result;
+    }
+
+    private void dfs(int index, int[] coins, int amount, int no_of_coins) {
+        //base
+        if (amount < 0)
+            return;
+        if (amount == 0) {
+            result = Math.min(result, no_of_coins);
+            return;
+        }
+        for (int i = index; i < coins.length; i++) {
+            dfs(i, coins, amount - coins[i], no_of_coins + 1);
+        }
+    }
+}
+/**
+| Problem type            | Exhaustive recursion                  |
+| ----------------------- | ------------------------------------- |
+| 0/1 subset/choice       | **O(2^n)** time, O(n) stack           |
+| Coin Change / unbounded | **O(k^amount)** time, O(amount) stack |
+ */
