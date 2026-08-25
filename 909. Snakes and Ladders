@@ -1,4 +1,7 @@
 My version
+Time: O(n²)
+Auxiliary space: O(n²) for the flattened array, queue, and visited array.
+
 class Solution {
     public int snakesAndLadders(int[][] board) {
         int row = board.length;
