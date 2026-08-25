@@ -1,0 +1,157 @@
+My version
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        int row = board.length;
+        int col = board[0].length;
+
+        int[] arr = new int[row * col];
+        boolean leftToright = true;
+        int r = row - 1;
+        int c = 0;
+        //flatten the input array
+        for (int i = 0; i < arr.length; i++) {
+            if (board[r][c] == -1)
+                arr[i] = board[r][c];
+            else
+                arr[i] = board[r][c] - 1;
+
+            if (leftToright) {
+                c++;
+                if (c == col) {
+                    c--;
+                    r--;
+                    leftToright = false;
+                }
+            } else {
+                c--;
+                if (c < 0) {
+                    c++;
+                    r--;
+                    leftToright = true;
+                }
+            }
+
+        }
+        System.out.println(Arrays.toString(arr));
+        //start BFS
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(0);
+        int moves = 0;
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            moves++;
+            System.out.println(queue);
+            System.out.println("arr.length"+arr.length);
+            while (size > 0) {
+                int idx = queue.poll();
+                for (int i = 1; i < 7; i++) {
+                    int newIdx = i + idx;
+                    if (newIdx >= arr.length)
+                        break;
+                    if (newIdx == arr.length - 1 || arr[newIdx] == arr.length - 1)
+                        return moves;
+                    if (arr[newIdx] != -2) { //using board as visited set
+                        if (arr[newIdx] == -1)
+                            queue.offer(newIdx);
+                        else
+                            queue.offer(arr[newIdx]);
+
+                    }
+                    arr[newIdx] = -2;
+                }
+                size--;
+            }
+
+        }
+        return -1;
+    }
+}
+==============================
+Below version uses a seperate visited array
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+
+        int row = board.length;
+        int col = board[0].length;
+
+        // Flatten board
+        int[] arr = new int[row * col];
+
+        boolean leftToRight = true;
+        int r = row - 1;
+        int c = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+
+            if (board[r][c] == -1)
+                arr[i] = -1;
+            else
+                arr[i] = board[r][c] - 1;
+
+            if (leftToRight) {
+                c++;
+
+                if (c == col) {
+                    c--;
+                    r--;
+                    leftToRight = false;
+                }
+
+            } else {
+                c--;
+
+                if (c < 0) {
+                    c++;
+                    r--;
+                    leftToRight = true;
+                }
+            }
+        }
+
+        // BFS
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[arr.length];
+
+        queue.offer(0);
+        visited[0] = true;
+
+        int moves = 0;
+
+        while (!queue.isEmpty()) {
+
+            int size = queue.size();
+            moves++;
+
+            while (size > 0) {
+
+                int idx = queue.poll();
+
+                for (int dice = 1; dice <= 6; dice++) {
+
+                    int newIdx = idx + dice;
+
+                    if (newIdx >= arr.length)
+                        break;
+
+                    // Snake or ladder
+                    if (arr[newIdx] != -1)
+                        newIdx = arr[newIdx];
+
+                    // Reached final square
+                    if (newIdx == arr.length - 1)
+                        return moves;
+
+                    if (!visited[newIdx]) {
+                        visited[newIdx] = true;
+                        queue.offer(newIdx);
+                    }
+                }
+
+                size--;
+            }
+        }
+
+        return -1;
+    }
+}
