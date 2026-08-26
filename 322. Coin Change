@@ -28,3 +28,54 @@ class Solution {
 | 0/1 subset/choice       | **O(2^n)** time, O(n) stack           |
 | Coin Change / unbounded | **O(k^amount)** time, O(amount) stack |
  */
+=============================================================
+It is easy to identify repetetive subproblem in 01 recursion
+// TC - O(2^m+n)
+// SC - O(h) // recursion stack
+class Solution {
+    int result = Integer.MAX_VALUE;
+
+    public int coinChange(int[] coins, int amount) {
+        dfs(0, coins, amount, 0);
+        return result == Integer.MAX_VALUE ? -1 : result;
+    }
+
+    private int dfs(int i, int[] coins, int amount, int no_of_coins) {
+        //base
+        if (amount < 0 || i==coins.length)
+            return Integer.MAX_VALUE;
+        if (amount == 0) {
+            result = Math.min(result, no_of_coins);
+            return no_of_coins;
+        }
+        int choose = dfs(i, coins, amount - coins[i], no_of_coins + 1);
+        int dontchoose = dfs(i+1, coins, amount, no_of_coins);
+        return Math.min(choose, dontchoose);
+    }
+}
+===============
+Optimal solution
+TC = O(coins × amount)
+SC = O(coins × amount)
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int c = amount + 1;
+        int r = coins.length + 1;
+        int[][] dp = new int[r][c];
+        System.out.println(Arrays.toString(dp));
+        for (int j = 1; j < c; j++) { //first row where i=0
+            dp[0][j] = 99999; // instead of Integer.MAX_VALUE use any max positive value as Integer.MAX_VALUE+1 result in overflow
+        }
+        //first row is filled, now start filling from 1
+        for (int i = 1; i < r; i++) {
+            for (int j = 1; j < c; j++) {
+                if (j < coins[i - 1]) { //use coins[i-1] not coins[i], because j refers to dp array(additional row and col) and coins refers to given input
+                    dp[i][j] = dp[i - 1][j];
+                } else {
+                    dp[i][j] = Math.min(dp[i - 1][j], 1 + dp[i][j - coins[i - 1]]);
+                }
+            }
+        }
+        return dp[r - 1][c - 1] == 99999 ? -1 : dp[r - 1][c - 1];
+    }
+}
