@@ -22,3 +22,21 @@ class Solution {
 }
 ===================
 //above solution can be optimized as below
+//TC - O(coins * amount)
+//SC - O(amount)
+class Solution {
+    public int change(int amount, int[] coins) {
+        int r = coins.length + 1;
+        int c = amount + 1;
+        int[] dp = new int[c];
+        dp[0] = 1;
+        for (int i = 1; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                //amount < coin denomination
+                if (j >= coins[i - 1])
+                    dp[j] = dp[j] + dp[j - coins[i - 1]]; //up+left
+            }
+        }
+        return dp[c - 1];
+    }
+}
