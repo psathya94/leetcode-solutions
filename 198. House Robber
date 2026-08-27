@@ -17,3 +17,76 @@ class Solution {
         return dp[n-1];
     }
 }
+==========================================
+//Optimal solution
+//TC - O(n)
+//SC - O(1)
+class Solution {
+    public int rob(int[] nums) {
+        int n = nums.length;
+        if(n==1)
+            return nums[0];
+        int prev = nums[0];
+        int curr = Math.max(nums[0],nums[1]);
+        for(int i=2;i<n;i++){
+            int temp = curr;
+            curr = Math.max(nums[i]+prev,curr);
+            prev = temp;
+        }
+        return curr;
+    }
+}
+//we take 2 pointers. prev and curr. prev points to first element in the array and curr points to the second element in dp array. when we are at house 3 (i=2), we calculate the curr max earning = curr earning + prev and we compare it with current. Up until that point curr could be maximum or this house earning + prev could be  max. we keep only one which is max
+
+/**
+Here’s a cleaner version of your notes for future reference:
+
+### House Robber — 2-Pointer DP
+
+* We use **2 variables/pointers: `prev` and `curr`** instead of a full DP array.
+* `prev` represents the **maximum money we can rob up to 2 houses before the current house** (`dp[i-2]`).
+* `curr` represents the **maximum money we can rob up to the previous house** (`dp[i-1]`).
+
+At each house `i`:
+
+```text
+robCurrent = nums[i] + prev
+skipCurrent = curr
+
+curr = max(curr, nums[i] + prev)
+```
+
+Then move the pointers forward:
+
+```text
+prev = old curr
+curr = new curr
+```
+
+### Example
+
+For house 3 (`i = 2`):
+
+```text
+prev = dp[0]
+curr = dp[1]
+```
+
+We have two choices:
+
+1. **Skip house 3** → keep `curr`
+2. **Rob house 3** → `nums[2] + prev`
+
+So:
+
+```text
+curr = max(curr, nums[i] + prev)
+```
+
+We keep only the **maximum of these two choices**.
+
+**Key idea:**
+
+> At every house, either **skip it** and keep the previous maximum, or **rob it** and add its money to the maximum from two houses back.
+
+**/
