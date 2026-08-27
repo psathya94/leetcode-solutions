@@ -29,3 +29,46 @@ class Solution {
         return dp[dp.length-1];
     }
 }
+=======================================================
+Space optimized
+//TC - O(n)+O(max(n))
+//SC - O(1)
+class Solution {
+    public int deleteAndEarn(int[] nums) {
+        if(nums==null || nums.length==0)
+            return 0;
+        int n = nums.length;
+        //pre-process data
+
+        //find maximum in the given array
+        int max = 0;
+        for (int i = 0; i < n; i++) //O(n)
+            max = Math.max(max, nums[i]);
+
+        //create a new array of max size+1 because the numbers start from 0
+        int[] countArray = new int[max + 1];
+        for (int no : nums) { //O(n)
+            countArray[no] += no;
+        }
+        /**
+        int[] dp = new int[countArray.length];
+        dp[0] = countArray[0];
+        for (int i = 1; i < countArray.length; i++) { //O(max(n))
+            if (i == 1)
+                dp[i] = Math.max(countArray[i], dp[i - 1]);
+            else
+                dp[i] = Math.max(countArray[i] + dp[i - 2], dp[i - 1]);
+        }
+        return dp[dp.length-1];
+         */
+        //only 2 pointers are used to reduce the space complexity from O(max(n)) to O(1)
+         int prev = countArray[0];
+         int curr = countArray[1];
+         for (int i = 2; i < countArray.length; i++) { 
+            int temp = curr;
+            curr = Math.max(countArray[i] + prev, curr);
+            prev = temp;
+         }
+         return curr;
+    }
+}
