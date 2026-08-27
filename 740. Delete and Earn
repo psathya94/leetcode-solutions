@@ -50,20 +50,10 @@ class Solution {
         for (int no : nums) { //O(n)
             countArray[no] += no;
         }
-        /**
-        int[] dp = new int[countArray.length];
-        dp[0] = countArray[0];
-        for (int i = 1; i < countArray.length; i++) { //O(max(n))
-            if (i == 1)
-                dp[i] = Math.max(countArray[i], dp[i - 1]);
-            else
-                dp[i] = Math.max(countArray[i] + dp[i - 2], dp[i - 1]);
-        }
-        return dp[dp.length-1];
-         */
+        
         //only 2 pointers are used to reduce the space complexity from O(max(n)) to O(1)
          int prev = countArray[0];
-         int curr = countArray[1];
+         int curr = Math.max(countArray[0], countArray[1]);
          for (int i = 2; i < countArray.length; i++) { 
             int temp = curr;
             curr = Math.max(countArray[i] + prev, curr);
