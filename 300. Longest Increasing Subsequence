@@ -20,3 +20,42 @@ class Solution {
         return max;
     }
 }
+==================================
+Optimal solution- expected during interview
+//TC - O(n log n)
+//SC - O(n)
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int n = nums.length;
+
+        int[] tailArray = new int[n];
+        tailArray[0] = nums[0];
+        int le = 0; //index to track the last element in tail array
+
+        for (int i = 1; i < n; i++) {
+            int in = nums[i];
+            if (in > tailArray[le]) {
+                tailArray[++le] = in;
+            } else {
+                //binary search to find the element that is just greater than in
+                int pos = binarySearch(tailArray, 0, le, in);
+                tailArray[pos] = in;
+            }
+        }
+        return le + 1;
+    }
+
+    private int binarySearch(int[] tailArray, int low, int high, int target) {
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (tailArray[mid] == target) {
+                return mid;
+            } else if (tailArray[mid] > target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+}
