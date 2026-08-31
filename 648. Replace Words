@@ -1,0 +1,61 @@
+/**
+If D = total characters in dictionary and S = total characters in sentence:
+
+Build Trie: O(D)
+Search sentence: O(S) in the worst case
+Space: O(D)
+ */
+class Solution {
+    class TrieNode {
+        boolean isEnd;
+        TrieNode[] children;
+
+        public TrieNode() {
+            children = new TrieNode[26];
+        }
+
+        public void insert(TrieNode root, String word) {
+            TrieNode curr = root;
+            for (char c : word.toCharArray()) {
+                if (curr.children[c - 'a'] == null) {
+                    curr.children[c - 'a'] = new TrieNode();
+                }
+                curr = curr.children[c - 'a'];
+            }
+            curr.isEnd = true;
+        }
+    }
+
+    public String replaceWords(List<String> dictionary, String sentence) {
+        TrieNode root = new TrieNode();
+        //insert
+        for (String w : dictionary) {
+            root.insert(root, w);
+        }
+        String[] words = sentence.split(" ");
+        StringBuilder result = new StringBuilder();
+        for (String word : words) {
+            //the,cattle,was,rattled,by,the,battery
+            StringBuilder sb = search(root, word);
+            result.append(sb);
+            result.append(" ");
+        }
+        return result.toString().trim(); //note - trim is necessary to trim the last " " added to result
+    }
+
+    private StringBuilder search(TrieNode root, String word) {
+        TrieNode curr = root;
+        StringBuilder toreplace = new StringBuilder();
+        for (char c : word.toCharArray()) {
+            if (curr.children[c - 'a'] == null) {
+                return new StringBuilder(word);
+            }
+            toreplace.append(c);
+            curr = curr.children[c - 'a'];
+            if (curr.isEnd) {
+                return toreplace;
+            }
+        }
+        return new StringBuilder(word); //whole word is searched and isEnd is not true
+    }
+}
