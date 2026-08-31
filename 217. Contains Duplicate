@@ -1,0 +1,47 @@
+//Optimal - discuss below algorithm if additional space can be utilized
+/**
+Time: O(n) average
+Space: O(n)
+ */
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        HashSet<Integer> set = new HashSet<>();
+        for(int i: nums){
+            if(!set.add(i))
+                return true;
+        }
+        return false;
+    }
+}
+
+/**
+input = [1,2,3,1]
+set.add(1) = true
+set.add(2) = true
+set.add(3) = true
+set.add(1) = false
+
+HashSet.add() returns:
+true → element was not already present, so it was added.
+false → element already existed.
+ */
+==================================
+//no additional space, but input is modified by sorting
+//Sorting — O(n log n) time, O(1) auxiliary space
+public boolean containsDuplicate(int[] nums) {
+    Arrays.sort(nums);
+
+    for (int i = 1; i < nums.length; i++) {
+        if (nums[i] == nums[i - 1]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+===============
+| Approach    |          Time |               Space | 
+| ----------- | ------------: | ------------------: | 
+| Brute force |         O(n²) |                O(1) | 
+| Sorting     |    O(n log n) | Low auxiliary space | 
+| **HashSet** | **O(n) avg.** |            **O(n)** | 
