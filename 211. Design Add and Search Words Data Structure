@@ -39,23 +39,23 @@ class WordDictionary {
 
     private boolean dfs(TrieNode curr, String word, int index) {
         //base
-        if (index == word.length()) {
-            return curr.isEnd;
-        }
+        if (index == word.length())
+            return curr.isEnd; //always return curr.isEnd (could be true or false based on the word ends in Trie)
         //logic
-        char c = word.charAt(index);
+        char c = word.charAt(index); //p
         if (c != '.') {
+            //alphabet
             TrieNode child = curr.children[c - 'a'];
-            if (child == null) {
+            if (child == null)
                 return false;
-            }
-            if (dfs(child, word, index+1))
+            if (dfs(child, word, index + 1))
                 return true;
         } else {
+            // .
             for (int i = 0; i < 26; i++) {
                 TrieNode child = curr.children[i];
                 if (child != null) {
-                    if (dfs(child, word, index+1))
+                    if (dfs(child, word, index + 1))
                         return true;
                 }
             }
