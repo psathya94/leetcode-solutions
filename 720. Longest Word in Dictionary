@@ -1,0 +1,59 @@
+//TC - O(NL) where N is no.of words and L is the length
+//SC - O(NL)
+class Solution {
+    public class TrieNode {
+        boolean isEnd;
+        TrieNode[] children;
+
+        public TrieNode() {
+            children = new TrieNode[26];
+            isEnd = false;
+        }
+
+        public void insert(TrieNode root, String word) {
+            TrieNode curr = root;
+            for (char c : word.toCharArray()) {
+                if (curr.children[c - 'a'] == null) {
+                    curr.children[c - 'a'] = new TrieNode();
+                }
+                curr = curr.children[c - 'a'];
+            }
+            curr.isEnd = true;
+        }
+    }
+
+    TrieNode root;
+    String result = "";
+
+    public String longestWord(String[] words) {
+        root = new TrieNode();
+        for (String w : words) { //O(NL)
+            root.insert(root, w);
+        }
+
+        dfs(root, new StringBuilder());
+        return result;
+    }
+
+    public void dfs(TrieNode root, StringBuilder path) {
+        //base
+        if(path.length() > result.length()){
+            result = path.toString(); //no return here, dfs has to continue
+        }
+        //logic
+        for (int i = 0; i < 26; i++) {
+            TrieNode child = root.children[i];
+
+            if (child != null && child.isEnd) {
+                int length = path.length();
+                char c = (char) (i + 97);
+                path.append(c);
+
+                dfs(child, path);
+
+                path.setLength(length);
+            }
+        }
+
+    }
+}
