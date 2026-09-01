@@ -1,0 +1,51 @@
+//TC - O(n)
+//SC - O(n)
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        if (intervals.length <= 1)
+            return intervals;
+        // 1. Sort
+        // Arrays.sort(intervals,(a,b)->Integer.compare(a[0],b[0])); or
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        List<int[]> result = new ArrayList<>();
+        int currStart = intervals[0][0];
+        int currEnd = intervals[0][1];
+
+        for (int i = 1; i < intervals.length; i++) {
+            int newStart = intervals[i][0];
+            int newEnd = intervals[i][1];
+            //overlap
+            if (currEnd >= newStart) {
+                currStart = Math.min(currStart, newStart);
+                currEnd = Math.max(currEnd, newEnd);
+            } else {
+                //no overlap
+                result.add(new int[] { currStart, currEnd });
+                currStart = newStart;
+                currEnd = newEnd;
+            }
+        }
+        result.add(new int[] { currStart, currEnd });
+        return result.toArray(new int[result.size()][]);
+    }
+}
+/**
+class Solution {
+    public int[][] merge(int[][] intervals) {
+
+        // 1. Sort
+
+        // 2. Create result
+
+        // 3. Initialize current interval
+
+        // 4. Iterate
+
+        // 5. Merge or add
+
+        // 6. Add final current interval
+
+        // 7. Convert List<int[]> to int[][]
+    }
+}
+ */
