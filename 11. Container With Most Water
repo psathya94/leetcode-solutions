@@ -1,0 +1,27 @@
+//TC-O(n)
+//SC - O(1)
+class Solution {
+    public int maxArea(int[] height) {
+        int low =0;
+        int high = height.length-1;
+        int maxWater = 0;
+        while(low<high){
+            int h = Math.min(height[low],height[high]);
+            int w = high-low;
+            maxWater = Math.max(maxWater, h*w);
+
+            if(height[low]<height[high]){ //note-check the element here not indices
+                low++;
+            }else{
+                high--;
+            }
+        }
+        return maxWater;
+    }
+}
+/**
+TC: O(n) — each pointer moves at most n times total.
+SC: O(1) — only constant extra variables.
+Key insight: Always move the pointer at the shorter height, because moving the taller one cannot increase the limiting height and also decreases width.
+Your comment is good: compare height[low] and height[high], not the indices.
+ */
