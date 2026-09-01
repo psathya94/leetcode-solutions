@@ -1,0 +1,24 @@
+//TC - O(n log n)
+//SC - O(1)
+class Solution {
+    public int eraseOverlapIntervals(int[][] intervals) {
+        //sort based on end time
+        Arrays.sort(intervals, (a, b) -> a[1] - b[1]);
+        int removalCount = 0;
+        int previousStart = intervals[0][0];
+        int previousEnd = intervals[0][1];
+        for (int i = 1; i < intervals.length; i++) {
+            int currStart = intervals[i][0];
+            int currEnd = intervals[i][1];
+            if (previousEnd > currStart) {
+                //overlap, keep the smaller. we keep the previous and skip curr
+                removalCount++;
+            }else{
+                //when no overlap, no need to skip any.but make the current as previous for the next iteration
+                previousStart = currStart;
+                previousEnd = currEnd;
+            }
+        }
+        return removalCount;
+    }
+}
