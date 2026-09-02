@@ -1,0 +1,56 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+//TC - O(N log k)
+//SC - O(k)
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists.length == 0)
+            return null;
+        PriorityQueue<ListNode> pq = new PriorityQueue<>((a, b) -> Integer.compare(a.val, b.val));
+        for (int i = 0; i < lists.length; i++) {
+            ListNode node = lists[i];
+            if (node != null) { //note
+                pq.add(node);
+            }
+        }
+        ListNode dummy = new ListNode(-1);
+        ListNode dummyHead = dummy;
+
+        while (!pq.isEmpty()) {
+            ListNode node = pq.poll();
+            dummy.next = node;
+            dummy = dummy.next;
+
+            if (node.next != null) //note
+                pq.add(node.next);
+        }
+        return dummyHead.next;
+    }
+}
+/**
+Complexity
+
+Let:
+
+k = number of linked lists
+N = total number of nodes across all lists
+
+Time: O(N log k)
+
+Every node is:
+
+inserted into the heap once → O(log k)
+removed once → O(log k)
+
+Space: O(k) auxiliary
+
+The heap contains at most one node from each list.
+*/
