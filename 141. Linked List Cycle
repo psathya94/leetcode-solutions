@@ -26,3 +26,8 @@ public class Solution {
         return false;
     }
 }
+/**
+Algorithm
+I'll use Floyd's cycle detection algorithm. I'll maintain two pointers, slow and fast. Slow moves one node at a time, while fast moves two nodes. 
+If there is no cycle, fast will reach null. If there is a cycle, both pointers will eventually be inside the cycle, and fast will catch slow. Therefore, if slow == fast, a cycle exists
+**/
