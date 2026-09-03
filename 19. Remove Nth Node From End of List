@@ -31,3 +31,7 @@ class Solution {
         return dummy.next;
     }
 }
+/**
+Use a dummy node + two pointers with a gap of n nodes. Move both pointers until fast reaches the end, then slow points to the node before the one to remove.
+Finally, skip the target using slow.next = slow.next.next. TC: O(n), SC: O(1).
+*/
