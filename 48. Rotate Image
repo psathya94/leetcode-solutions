@@ -1,0 +1,30 @@
+//TC - O(n^2) n*n matrix
+//SC - O(1)
+class Solution {
+    public void rotate(int[][] matrix) {
+        int r = matrix.length;
+        int c = matrix[0].length;
+        //1.Transpose
+        for (int i = 0; i < r; i++) {
+            for (int j = i; j < c; j++) {
+                if (i != j) { //not needed, can be cleaned up
+                    int temp = matrix[i][j];
+                    matrix[i][j] = matrix[j][i];
+                    matrix[j][i] = temp;
+                }
+            }
+        }
+        //Flip the elements in the row
+        for (int i = 0; i < r; i++) {
+            int low = 0;
+            int high = c - 1;
+            while (low < high) {
+                int temp = matrix[i][low];
+                matrix[i][low] = matrix[i][high];
+                matrix[i][high] = temp;
+                low++;
+                high--;
+            }
+        }
+    }
+}
