@@ -1,0 +1,61 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+// TC - O(n)
+// SC - O(1)
+class Solution {
+    public void reorderList(ListNode head) {
+       if (head == null || head.next == null) {
+            return;
+        }
+
+        // 1. Find middle
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) { //1-->2-->3 (fast becomes null) and 1-->2-->3-->4 (fast.next becomes null)
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // 2. Split list
+        //slow lands on the mid of linked list
+        ListNode l2 = slow.next;
+        slow.next = null; //very important. break the list into two, otherwise it lands in cycle
+
+        
+        // 3. Reverse second half
+        ListNode p1 = null;
+        ListNode p2 = l2;
+        while (p2 != null) {
+            ListNode temp = p2.next;
+            p2.next = p1;
+            p1 = p2;
+            p2 = temp;
+        }
+        //re-assign l2 to head of reversed list
+        l2 = p1;
+        ListNode l1 = head;
+
+        // 4. Merge l1 and l2 alternately
+        while (l2 != null) { //l2 is always smaller, so its enough to check l2
+            ListNode next1 = l1.next; //store it for next iteration
+            ListNode next2 = l2.next;
+            l1.next = l2;
+            l2.next = next1;
+            l1 = next1;
+            l2 = next2;
+        }
+    }
+}
+/**
+Find the middle using slow/fast pointers
+Reverse the second half
+Merge the first half and reversed second half alternately
+ */
