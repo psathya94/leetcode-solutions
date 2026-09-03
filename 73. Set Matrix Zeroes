@@ -1,0 +1,54 @@
+//TC - O(m*n)
+//SC - O(1)
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+
+        //first column marker
+        boolean firstcolZero = false;
+        //1.scan first col(col 0) and record if there are any zeros
+        for (int i = 0; i < row; i++) {
+            if (matrix[i][0] == 0)
+                firstcolZero = true;
+        }
+        //2.scan row 0 and record if there are any zeros
+        for (int j = 0; j < col; j++) {
+            if (matrix[0][j] == 0)
+                matrix[0][0] = 0;  //first row marker
+        }
+        //3.scan remaining elements and record zeros in first row and col
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+
+        //4.Update zeros using the recorded values first row and col
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        //5.Update zeros in the first row
+        if (matrix[0][0] == 0) {
+            for (int j = 0; j < col; j++) {
+                matrix[0][j] = 0;
+
+            }
+        }
+
+        //5.Update zeros in the first column
+        if (firstcolZero) {
+            for (int i = 0; i < row; i++) {
+                matrix[i][0] = 0;
+
+            }
+        }
+    }
+}
