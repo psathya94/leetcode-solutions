@@ -35,9 +35,13 @@ class Solution {
             for (int[] dir : directions) {
                 int nr = row + dir[0];
                 int nc = col + dir[1];
-                 if(dfs(nr, nc, widx + 1, board, word)) //we try 4 directions - up,dow, left, right. Suppose dfs returns false, we need to continue the for loop. we exit the for loop only when true is returned for any dfs call(character matched)
+                 if(dfs(nr, nc, widx + 1, board, word)) {
+                    board[row][col] = word.charAt(widx);
                     return true;
+                 }
+                 //we try 4 directions - up,dow, left, right. Suppose dfs returns false, we need to continue the for loop. we exit the for loop only when true is //returned for any dfs call(character matched)     
             }
+            //backtrack
             board[row][col] = word.charAt(widx);
         }
         return false;
