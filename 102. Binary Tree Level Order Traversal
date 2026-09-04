@@ -1,3 +1,4 @@
+Discuss BFS and DFS solution. Morris inorder is not necessary for this problem
 /**
  * Definition for a binary tree node.
  * public class TreeNode {
@@ -107,7 +108,7 @@ BFS
  * }
  */
  //TC - O(n)
- //SC - O(h)
+ //SC - O(n)
 class Solution {
     List<List<Integer>> result;
 
@@ -133,16 +134,4 @@ class Solution {
         }
         return result;
     }
-
-    /** private void dfs(TreeNode root, int level) {
-        if (root == null)
-            return;
-        if (level == result.size()) {
-            List<Integer> newList = new ArrayList<>();
-            result.add(newList);
-        }
-        result.get(level).add(root.val);
-        dfs(root.left, level + 1);
-        dfs(root.right, level + 1);
-    } */
 }
