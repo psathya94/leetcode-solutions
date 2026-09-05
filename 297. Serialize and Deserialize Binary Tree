@@ -1,0 +1,90 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+//TC - O(n)
+//SC - O(n)
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null)
+            return "";
+        StringBuilder sb = new StringBuilder();
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        while (!q.isEmpty()) {
+            TreeNode curr = q.poll();
+            if (curr == null) {
+                sb.append("#");
+                sb.append(" ");
+
+            } else {
+                sb.append(curr.val);
+                sb.append(" ");
+                q.add(curr.left);
+                q.add(curr.right);
+            }
+        }
+        System.out.println(sb);
+        return sb.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data.length() == 0 || data == null)
+            return null;
+        String[] arr = data.split(" ");
+        TreeNode root = new TreeNode(Integer.parseInt(arr[0]));
+        int idx = 1;
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        while (!q.isEmpty() && idx != arr.length) {
+            TreeNode curr = q.poll();
+            //left
+            if (arr[idx].equals("#"))
+                curr.left = null;
+            else {
+                curr.left = new TreeNode(Integer.parseInt(arr[idx]));
+                q.add(curr.left);
+            }
+            idx++;
+            //right
+            if (arr[idx].equals("#"))
+                curr.right = null;
+            else {
+                curr.right = new TreeNode(Integer.parseInt(arr[idx]));
+                q.add(curr.right);
+            }
+            idx++;
+        }
+        return root;
+    }
+}
+/**
+Algorithm:
+Serialize
+1. We are given tree, if tree root is null, return empty string.
+2. If root is not null, add it queue, do bfs.
+3. In bfs, append root.val to stringbuilder. add left and right to the queue
+4. We add null babies to queue. Queue contains - null or TreeNode
+5. If queue.poll is null, append # and if its a TreeNode append root.val to stringbuilder
+
+Deserialize
+BFS
+take one real node from queue
+→ read left value from string builder
+→ read right value
+-> SB can give # or root.val
+-> If #, add null baby to the curr node. If not, create new TreeNode child and add it to curr node and queue
+
+ */
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
