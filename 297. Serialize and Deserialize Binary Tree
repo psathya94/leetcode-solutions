@@ -83,6 +83,12 @@ take one real node from queue
 -> SB can give # or root.val
 -> If #, add null baby to the curr node. If not, create new TreeNode child and add it to curr node and queue
 
+serialize()
+Time: O(n) — each node is processed once.
+Space: O(n) — the queue can contain up to O(n) nodes, and the output string is also O(n).
+deserialize()
+Time: O(n) — each serialized token/node is processed once.
+Space: O(n) — the queue can hold O(n) nodes, and the arr created by split() is also O(n).
  */
 // Your Codec object will be instantiated and called as such:
 // Codec ser = new Codec();
