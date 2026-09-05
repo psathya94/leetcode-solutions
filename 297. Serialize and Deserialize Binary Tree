@@ -94,3 +94,118 @@ Space: O(n) — the queue can hold O(n) nodes, and the arr created by split() is
 // Codec ser = new Codec();
 // Codec deser = new Codec();
 // TreeNode ans = deser.deserialize(ser.serialize(root));
+
+==============================================
+DFS solution
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+public class Codec {
+    StringBuilder sb;
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if (root == null)
+            return "";
+        sb = new StringBuilder();
+
+        serializeHelper(root);
+        System.out.println(sb); //1 2 # # 3 4 # # 5 # # 
+        return sb.toString();
+    }
+
+    private void serializeHelper(TreeNode root) {
+        if (root == null) {
+            sb.append("#");
+            sb.append(" ");
+            return;
+        }
+        sb.append(root.val);
+        sb.append(" ");
+        serializeHelper(root.left);
+        serializeHelper(root.right);
+    }
+    int idx;
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        if (data.length() == 0 || data == null)
+            return null;
+        String[] arr = data.split(" ");
+        //int idx = 1; //make it global
+        idx = 0;
+        return deserializeHelper(arr);
+    }
+
+    private TreeNode deserializeHelper(String[] arr) { //1 2 # # 3 4 # # 5 # # 
+    
+        if (arr[idx].equals("#")) {
+            idx++;
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.parseInt(arr[idx]));
+        idx++;
+
+        root.left = deserializeHelper(arr);
+        root.right = deserializeHelper(arr);
+        
+        return root;
+
+    }
+}
+/**
+For your **DFS solution** to 297. Serialize and Deserialize Binary Tree:
+
+### `serialize()`
+
+* **Time:** `O(n)`
+* **Space:** `O(n)`
+
+Why?
+
+* We visit every node exactly once → `O(n)`.
+* Recursion stack can be `O(h)`, where `h` is tree height.
+* `StringBuilder` stores the serialized tree → `O(n)`.
+
+So overall space is **O(n)**.
+
+### `deserialize()`
+
+* **Time:** `O(n)`
+* **Space:** `O(n)`
+
+Why?
+
+* Every serialized token (`node` or `#`) is processed once → `O(n)`.
+* `String[] arr` takes `O(n)`.
+* Recursion stack takes `O(h)`.
+* We create `n` tree nodes → `O(n)`.
+
+### Interview-ready answer
+serialize:
+TC = O(n)
+SC = O(n)
+
+deserialize:
+TC = O(n)
+SC = O(n)
+
+**Important:** If the interviewer specifically asks for **auxiliary space excluding the output tree/string**, you can mention:
+
+serialize auxiliary space = O(h)
+deserialize auxiliary space = O(n)  // arr + recursion
+
+But the standard answer for this LeetCode problem is simply **O(n) time and O(n) space for both operations**.
+
+
+ */
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
