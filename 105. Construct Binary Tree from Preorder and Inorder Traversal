@@ -50,3 +50,48 @@ class Solution {
 
 ========================
 Approach 2
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+//Time Complexity:O(n)
+//Space Complexity:O(n)
+class Solution {
+    int preorderIdx;
+    HashMap<Integer, Integer> map;
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        this.map = new HashMap<>();
+        for(int i=0; i< inorder.length;i++){
+            map.put(inorder[i], i);
+        }
+        TreeNode root = dfs(0,inorder.length-1, preorder); 
+        return root;
+    }
+
+    private TreeNode dfs(int start, int end, int[] preorder){
+        if(start>end)
+            return null;
+
+        //logic
+        int rootVal = preorder[preorderIdx];
+        preorderIdx++;
+        TreeNode root = new TreeNode(rootVal);
+        int rootIdx = map.get(rootVal);
+
+        root.left = dfs(start, rootIdx-1, preorder);
+        root.right = dfs(rootIdx+1, end, preorder);
+        return root;
+    }
+}
