@@ -1,0 +1,31 @@
+//TC - O(n)
+//SC - O(n)
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+
+        for (int num : nums) {
+            set.add(num); // Autoboxing converts int to Integer
+        }
+        int maxCount = 0;
+        for (int i : set) { //iterate through the set as nums array might have duplicates and we end up performing the below operations multiple times
+            int count = 1;
+            if (!set.contains(i - 1)) {
+                int number = i;
+                while (set.contains(++number))
+                    count++;
+            }
+            maxCount = Math.max(maxCount, count);
+        }
+        return maxCount;
+    }
+}
+
+==========
+Bruteforce 
+TC - O(n log n)
+SC - O(1)
+1. sort
+2. iterate through every element in the array
+3. if nums[i]==nums[i-1] increment the count or reset the count to 1.
+4. compare count and maxCount during the loop
