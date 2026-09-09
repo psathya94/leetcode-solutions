@@ -1,0 +1,85 @@
+
+//Time: O(R × C)
+//Space: O(R × C)
+class Solution {
+    List<List<Integer>> result;
+    int[][] directions = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
+
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        result = new ArrayList<>();
+        int r = heights.length;
+        int c = heights[0].length;
+
+        //visited set
+        boolean[][] pacific = new boolean[r][c];
+        boolean[][] atlantic = new boolean[r][c];
+        
+        Queue<int[]> queue = new ArrayDeque<>();
+        //add first row and first col to pacific
+        int i = 0;
+        for (int j = 0; j < c; j++) {
+            queue.add(new int[] { i, j });
+            pacific[i][j] = true;
+        }
+        int j = 0;
+        for (i = 1; i < r; i++) { //dont add 0,0 again
+            queue.add(new int[] { i, j });
+            pacific[i][j] = true;
+        }
+
+        //System.out.println(queue);
+        bfs(heights, queue, pacific);
+
+        //add last row and last col to atlantic
+        i = r - 1;
+        for (j = 0; j < c; j++) {
+            queue.add(new int[] { i, j });
+            atlantic[i][j] = true;
+        }
+        j = c - 1;
+        for (i = 0; i < r-1; i++) { // avoid bottom-right duplicate
+            queue.add(new int[] { i, j });
+            atlantic[i][j] = true;
+        }
+
+        //System.out.println(queue);
+        bfs(heights, queue, atlantic);
+        for (i = 0; i < r; i++) {
+            for (j = 0; j < c; j++) {
+                if (pacific[i][j] && atlantic[i][j]) {
+                    result.add(Arrays.asList(i, j));
+                }
+            }
+        }
+        return result;
+    }
+
+    private void bfs(int[][] heights, Queue<int[]> queue, boolean[][] visited) {
+
+        while (!queue.isEmpty()) {
+            int[] cell = queue.poll();
+            //4 directions
+            for (int[] dir : directions) {
+                int nr = cell[0] + dir[0];
+                int nc = cell[1] + dir[1];
+                if (nr >= 0 && nr < heights.length && nc >= 0 && nc < heights[0].length) { //valid cell
+                    if (!visited[nr][nc] && heights[nr][nc] >= heights[cell[0]][cell[1]]) {
+                        visited[nr][nc] = true;
+                        queue.add(new int[] { nr, nc });
+                    }
+                }
+            }
+        }
+    }
+
+}
+/**
+
+Your key insight is exactly right:
+
+Start BFS from the Pacific borders.
+Start BFS from the Atlantic borders.
+Instead of flowing downhill from every cell, reverse the flow:
+From an ocean cell, we can move to a neighboring cell if
+heights[nr][nc] >= heights[current].
+At the end, cells reachable from both oceans are the answer. */
