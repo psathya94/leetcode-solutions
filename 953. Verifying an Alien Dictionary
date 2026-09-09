@@ -35,3 +35,4 @@ class Solution {
             return true;
     }
 }
+//when we have 2 words wrt and wrfz --> only the first differing character determines the order. w,r,z can be in any order but t comes before f
