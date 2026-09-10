@@ -22,13 +22,14 @@ class Solution {
             for (int j = 0; j < s1.length() && j < s2.length(); j++) {
                 char c1 = s1.charAt(j);
                 char c2 = s2.charAt(j);
-                if (c1 != c2) {
+                if (c1 != c2) { 
                     if (map.get(c2) < map.get(c1))
                         return false;
                     else
                         return true;
                 }
             }
+//when all characters are matched eg: apple and app, we return false as app should come before apple
             if (s1.length() > s2.length())
                 return false;
 
