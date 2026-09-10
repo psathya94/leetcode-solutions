@@ -1,0 +1,73 @@
+// TC: O(C), where C = total number of characters in all words
+// SC: O(1) because the alphabet has at most 26 characters
+class Solution {
+    public String alienOrder(String[] words) {
+        HashMap<Character, Set<Character>> map = new HashMap<>();
+        int[] indegree = new int[26];
+
+        // Add all characters
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
+                map.putIfAbsent(c, new HashSet<>());
+            }
+        }
+
+        // Build graph
+        for (int i = 1; i < words.length; i++) {
+            String s1 = words[i - 1];
+            String s2 = words[i];
+            boolean flag = false;
+
+            for (int j = 0; j < s1.length() && j < s2.length(); j++) {
+                char c1 = s1.charAt(j);
+                char c2 = s2.charAt(j);
+
+                if (c1 != c2) {
+                    Set<Character> set = map.get(c1);
+
+                    if (!set.contains(c2)) {
+                        set.add(c2);
+                        indegree[c2 - 'a']++;
+                    }
+
+                    flag = true;
+                    break;
+                }
+            }
+
+            // Invalid prefix: "apple" before "app"
+            if (!flag && s1.length() > s2.length()) {
+                return "";
+            }
+        }
+
+        // BFS / Topological Sort
+        StringBuilder sb = new StringBuilder();
+        Queue<Character> queue = new ArrayDeque<>();
+
+        for (char ch : map.keySet()) {
+            if (indegree[ch - 'a'] == 0) {
+                queue.offer(ch);
+            }
+        }
+
+        int count = 0;
+
+        while (!queue.isEmpty()) {
+            char c = queue.poll();
+            count++;
+            sb.append(c);
+
+            for (char child : map.get(c)) {
+                indegree[child - 'a']--;
+
+                if (indegree[child - 'a'] == 0) {
+                    queue.offer(child);
+                }
+            }
+        }
+
+        // Cycle -> invalid ordering
+        return count == map.size() ? sb.toString() : "";
+    }
+}
