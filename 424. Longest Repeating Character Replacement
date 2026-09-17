@@ -11,6 +11,7 @@ class Solution {
             while (right - left + 1 - maxFre > k) { //do not use window variable, as we update left and right, window also need another calculation
                 count[s.charAt(left) - 'A']--;
                 left++;
+                //you don't decrease maxFre when left moves as it will not affect the result
             }
             re = Math.max(re, right - left + 1);
         }
