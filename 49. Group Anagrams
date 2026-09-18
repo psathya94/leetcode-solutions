@@ -1,0 +1,17 @@
+//TC - O(Nk) - where N is the no.of string with avg length k
+//Auxiliary SC = O(N)
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String, List<String>> map = new HashMap<>();
+        for(String s: strs){
+            int[] count = new int[26];
+            for(char c: s.toCharArray()){
+                count[c-'a']++;
+            }
+            String key = Arrays.toString(count); //example for eat- [1, 0, 0, 0, 1, 0, ..., 1, 0, ...]
+
+            map.computeIfAbsent(key, k->new ArrayList<>()).add(s);
+        }
+        return new ArrayList<>(map.values());
+    }
+}
