@@ -67,20 +67,25 @@ class Solution {
     }
 }
 ========================================================================
-//TC-O(n)
-//SC-O(1)
+//TC - O(m+n)
+//SC - O(1)
+//APplies only when the input contains 26 english lowercase letters
 class Solution {
     public boolean isAnagram(String s, String t) {
-        if (s.length() != t.length()) {
+        if (s.length() != t.length()) //don't forget
             return false;
-        }
-        int[] freq = new int[26];
+        int[] count = new int[26];
         for (char c : s.toCharArray()) {
-            freq[c - 'a']++;
+            count[c - 'a']++;
         }
         for (char c : t.toCharArray()) {
-            freq[c - 'a']--;
-            if (freq[c - 'a'] < 0)
+            count[c - 'a']--;
+            if (count[c - 'a'] < 0)
+                return false;
+        }
+        //below loop is not required if we already verified the length of s and t are equal.
+        for (int i : count) {
+            if (i != 0)
                 return false;
         }
         return true;
