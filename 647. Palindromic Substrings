@@ -1,0 +1,27 @@
+//TC - O(n^2)
+//SC - O(1)
+class Solution {
+    int count = 0;
+
+    public int countSubstrings(String s) {
+        if (s == null || s.length() == 0)
+            return 0;
+
+        int n = s.length();
+        for (int i = 0; i < n; i++) {
+            extendAroundCenter(s, i, i); //odd
+            //ZBBQ
+            //if (i != n - 1 && s.charAt(i) == s.charAt(i + 1))  //not needed as boundary check is done in extendAroundCenter method
+                extendAroundCenter(s, i, i + 1); //even
+            
+        }
+        return count;
+    }
+    public void extendAroundCenter(String s, int left, int right) {
+        while(left>=0 && right<s.length() && s.charAt(left) == s.charAt(right)){
+            count++;
+            left--;
+            right++;
+        }
+    }
+}
