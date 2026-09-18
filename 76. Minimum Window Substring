@@ -1,5 +1,5 @@
 //TC - O(m+n)
-//SC - O(n)
+//SC - O(1)
 class Solution {
     public String minWindow(String s, String t) {
         int m = s.length();
