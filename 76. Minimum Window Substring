@@ -1,0 +1,58 @@
+//TC - O(m+n)
+//SC - O(n)
+class Solution {
+    public String minWindow(String s, String t) {
+        int m = s.length();
+        int n = t.length();
+        if (n > m) {
+            return "";
+        }
+        //Add elements in t to HashMap
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            char c = t.charAt(i);
+            map.put(c, (map.getOrDefault(c, 0) + 1));
+        }
+        int match = 0;
+        int j = 0;
+
+        int resultStart = 0;
+        int resultEnd = Integer.MAX_VALUE;
+
+        for (int i = 0; i < m; i++) { //s = "ADOBECODEBANC"
+            char in = s.charAt(i);
+            //Expand window
+            if (map.containsKey(in)) {
+                int count = map.get(in);
+                count--;
+                map.put(in, count);
+                if (count == 0) {
+                    match++;
+                }
+            }
+            while (match == map.size()) {
+                //record the start and end
+                if (i - j < resultEnd - resultStart) {
+                    resultStart = j;
+                    resultEnd = i;
+                }
+                //shrink window
+                char out = s.charAt(j);
+                if (map.containsKey(out)) {
+                    int count = map.get(out);
+                    count++;
+                    map.put(out, count); //don't forget
+                    if (count == 1) {
+                        match--;
+                    }
+                }
+                j++;
+            }
+        }
+        //when there are no matching characters in the window, resultEnd remains as initialized
+        if (resultEnd == Integer.MAX_VALUE) {
+            return "";
+        }
+        return s.substring(resultStart, resultEnd + 1);//substring takes additional character at the end
+    }
+}
