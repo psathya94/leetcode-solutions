@@ -1,0 +1,42 @@
+//TC - O(n^3)
+//SC - O(n^2)
+class Solution {
+    public int maxCoins(int[] nums) {
+        if (nums == null || nums.length == 0)
+            return 0;
+
+        int n = nums.length;
+        int[][] dp = new int[n][n];
+
+        for (int len = 1; len <= n; len++) {
+            for (int start = 0; start <= n - len; start++) { //if len of array is 3, start span from 0,1
+                int end = start + len - 1;
+                for (int k = start; k <= end; k++) {
+                    //example burstible array [1, 5, 8]
+                    //3 options, 1 at end, 5 at end, 8 at end
+                    //before + (left * nums[k] * right)  + after
+                    int before = 0;
+                    if (k != start) {
+                        before = dp[start][k - 1]; //take value from dp array
+                    }
+                    int after = 0;
+                    if (k != end) {
+                        after = dp[k + 1][end]; //take value from dp array
+                    }
+                    //calculate (left * nums[k] * right)
+                    int left = 1;
+                    if (start != 0) {
+                        left = nums[start - 1]; //take value from main array
+                    }
+                    int right = 1;
+                    if (end != n - 1) {
+                        right = nums[end + 1]; //take value from main array
+                    }
+                    int curr = before + (left * nums[k] * right) + after;
+                    dp[start][end] = Math.max(dp[start][end], curr);
+                }
+            }
+        }
+        return dp[0][n - 1]; //forst row, last col
+    }
+}
