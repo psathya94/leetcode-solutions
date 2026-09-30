@@ -40,3 +40,51 @@ class Solution {
         return dp[r][c];
     }
 }
+
+=======================================================================================================================================
+1 D version
+//TC - O(m*n)
+//SC - O(n)
+class Solution {
+    public boolean isMatch(String s, String p) {
+        if (s.equals(p))
+            return true;
+        int c = p.length();
+        int r = s.length();
+        if (c == 0)
+            return false;
+
+        boolean[] dp = new boolean[c + 1];
+        //fill first row
+        dp[0] = true;
+        for (int j = 1; j <= c; j++) {
+            if (p.charAt(j - 1) == '*')
+                dp[j] = dp[j - 2];
+        }
+
+        for (int i = 1; i <= r; i++) {
+            boolean diagUp = dp[0];
+            dp[0] = false;
+            for (int j = 1; j <= c; j++) {
+                boolean temp = dp[j];
+                // Normal character or '.'
+                if (s.charAt(i - 1) == p.charAt(j - 1) || p.charAt(j - 1) == '.') {
+                    dp[j] = diagUp;  //note
+                } else if (p.charAt(j - 1) == '*') {
+                    //0 case - 2 steps back
+                    dp[j] = dp[j - 2];
+                    //1 case exists only if character before * matches the character in string
+                    if (s.charAt(i - 1) == p.charAt(j - 2) || p.charAt(j - 2) == '.') {
+                        dp[j] = dp[j] || temp; //0 case || 1 step up (1 case)
+                    }
+                }
+                //when characters do not match, we explicitly make it to false in 1D array
+                else{
+                    dp[j] = false;
+                }
+                diagUp = temp;
+            }
+        }
+        return dp[c];
+    }
+}
