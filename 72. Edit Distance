@@ -39,10 +39,12 @@ class Solution {
 //SC - O(c)
 class Solution {
     public int minDistance(String word1, String word2) {
+        if(word1.equals(word2))
+            return 0;
         int r = word1.length();
         int c = word2.length();
-        if (r == 0 && c == 0)
-            return 0;
+        if (r < c)
+            return minDistance(word2, word1); //to have min word on column
         int[] dp = new int[c + 1];
 
         //fill first row
