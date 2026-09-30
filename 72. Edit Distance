@@ -34,3 +34,55 @@ class Solution {
         return dp[r][c];
     }
 }
+================================================================================================
+//TC - O(r*c)
+//SC - O(c)
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int r = word1.length();
+        int c = word2.length();
+        if (r == 0 && c == 0)
+            return 0;
+        int[] dp = new int[c + 1];
+
+        //fill first row
+        for (int j = 1; j < dp.length; j++) {
+            dp[j] = j;
+        }
+
+        //fill remaining row and col
+        for (int i = 1; i <= r; i++) {
+            int diag = dp[0]; //update diag during every row
+            dp[0] = i; // fill first row
+            for (int j = 1; j <= c; j++) {
+                int temp = dp[j];
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[j] = diag;
+                } else {
+                    int add = dp[j];
+                    int replace = diag;
+                    int delete = dp[j - 1];
+                    dp[j] = 1 + Math.min(delete, Math.min(add, replace));
+                }
+                diag = temp;
+            }
+        }
+        return dp[c];
+    }
+}
+/**
+3 things to remember
+
+	j	0	1	2	3	4	5
+i		-	h	o	r	s	e
+0	-	0	1	2	3	4	5
+1	r						
+2	o						
+3	s		
+
+1. Initialize the first row - 0	1	2	3	4	5
+2. Reuse the same 1D array for every row for calculating the values of r,o,s
+3. At the start of each row: save dp[0] into diag --> done only once for every row
+4. update the first element to i, dp[0] = i --> done only once for every row (no.of operations for converting emoty to current str)
+5. For the remaining elements on the row, save old dp[j] in temp, calculate new dp[j], set diag = temp for the next column
+ */
