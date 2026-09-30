@@ -1,0 +1,37 @@
+//TC - O(k * n^2)
+//SC - O(k * n)
+class Solution {
+    public int superEggDrop(int k, int n) {
+
+        int[][] dp = new int[k + 1][n + 1];
+
+        //build m*n matrix. row = eggs, col = floors
+        for (int eggs = 0; eggs <= k; eggs++) { //O(k)
+            for (int floors = 0; floors <= n; floors++) { //O(n)
+
+                if (eggs == 0 || floors == 0) {
+                    dp[eggs][floors] = 0; //attempt =0;
+
+                } else if (eggs == 1) {
+                    dp[eggs][floors] = floors; //when you have only one egg, one egg -> linear
+
+                } else {
+                    dp[eggs][floors] = Integer.MAX_VALUE;
+
+                    for (int f = 1; f <= floors; f++) { //O(n)
+
+                        int attempts = 1 + Math.max( //max = worst case because the egg can either break or survive, and we need enough attempts for whichever outcome takes longer
+                            dp[eggs - 1][f - 1], // egg breaks, check the floors below f - 1
+                            dp[eggs][floors - f] // egg survives, , check the floors above f + 1 to floors
+                        );
+
+                        dp[eggs][floors] =
+                            Math.min(dp[eggs][floors], attempts);
+                    }
+                }
+            }
+        }
+
+        return dp[k][n];
+    }
+}
