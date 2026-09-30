@@ -1,0 +1,36 @@
+//TC - O(r*c)
+//SC - O(r*c)
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int r = word1.length();
+        int c = word2.length();
+        int[][] dp = new int[r + 1][c + 1];
+        
+        //fill first row
+        dp[0][0] = 0; //not needed, as by default its 0
+        for (int j = 1; j < dp[0].length; j++) {
+            //dp[0][j] = dp[0][j - 1] + 1; //or
+            dp[0][j] = j;
+        }
+        //fill first col
+        for (int i = 1; i < dp.length; i++) {
+            //dp[i][0] = dp[i - 1][0] + 1; //or
+            dp[i][0] = i;
+        }
+        //fill remaining row and col
+        for (int i = 1; i < dp.length; i++) {
+            for (int j = 1; j < dp[0].length; j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    int add = dp[i - 1][j];
+                    int replace = dp[i - 1][j - 1];
+                    int delete = dp[i][j - 1];
+                    dp[i][j] = 1+ Math.min(delete, Math.min(add, replace));
+                }
+
+            }
+        }
+        return dp[r][c];
+    }
+}
