@@ -56,6 +56,6 @@ class Solution {
                 low = mid + 1;
             }
         }
-        return low;
+        return low; //always return low not mid, check docs for explanation
     }
 }
