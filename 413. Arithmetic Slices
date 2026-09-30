@@ -1,0 +1,20 @@
+//TC - O(n)
+//SC - O(1)
+class Solution {
+    public int numberOfArithmeticSlices(int[] nums) {
+        int n = nums.length;
+        if (nums == null || nums.length < 3)
+            return 0;
+        int counter = 0;
+        int aritmeticSlices = 0;
+        for (int i = 2; i < n; i++) {
+            if (nums[i] - nums[i - 1] == nums[i - 1] - nums[i - 2])
+                counter++;
+            else
+                counter = 0;
+
+            aritmeticSlices = aritmeticSlices + counter;
+        }
+        return aritmeticSlices;
+    }
+}
