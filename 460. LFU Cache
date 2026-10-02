@@ -1,0 +1,115 @@
+//TC - O(1) per operation
+//SC - O(n)
+class LFUCache {
+    class Node {
+        int key;
+        int val;
+        int freq;
+        Node next;
+        Node prev;
+
+        public Node(int key, int val) {
+            this.key = key;
+            this.val = val;
+            this.freq = 1;
+        }
+    }
+
+    class DLL {
+        Node head;
+        Node tail;
+        int size;
+
+        public DLL() {
+            this.head = new Node(-1, -1);
+            this.tail = new Node(-1, -1);
+            this.head.next = this.tail;
+            this.tail.prev = this.head;
+        }
+
+        private void removeNode(Node node) {
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+            size--;
+        }
+
+        private void addToHead(Node node) {
+            node.prev = head;
+            node.next = head.next;
+            head.next = node;
+            node.next.prev = node;
+            size++;
+        }
+    }
+
+    HashMap<Integer, Node> keyToNodeMap;
+    HashMap<Integer, DLL> keyToDLLMap;
+    int capacity;
+    int min;
+
+    public LFUCache(int capacity) {
+        this.keyToNodeMap = new HashMap<>();
+        this.keyToDLLMap = new HashMap<>();
+        this.capacity = capacity;
+        this.min = Integer.MAX_VALUE;
+    }
+
+    public int get(int key) {
+        if (!keyToNodeMap.containsKey(key))
+            return -1;
+        Node old = keyToNodeMap.get(key);
+        removeAndAddToNewList(old);
+
+        /**if(!keyToDLLMap.containsKey(newFreq)){
+            keyToDLLMap.put(newFreq, new DLL());
+        }
+        keyToDLLMap.get(newFreq).addToHead(n);**/
+        return old.val;
+    }
+
+    private void removeAndAddToNewList(Node n) {
+        int old_frequency = n.freq;
+        DLL list = keyToDLLMap.get(old_frequency);
+        list.removeNode(n);
+        int newFreq = old_frequency + 1;
+        n.freq = newFreq;
+        if (list.size == 0 && min==old_frequency) { //second condition is important
+            min = newFreq;
+        }
+        keyToDLLMap.computeIfAbsent(newFreq, k -> new DLL()).addToHead(n);
+    }
+
+    public void put(int key, int value) {
+        //existing node 
+        if (keyToNodeMap.containsKey(key)) {
+            Node n = keyToNodeMap.get(key);
+            n.val = value;
+            removeAndAddToNewList(n);
+        } else { //new node - capacity full, capacity not full
+            if (keyToNodeMap.size() == capacity) {
+                //evict node from the list and also from the map
+                DLL list = keyToDLLMap.get(min);
+                Node evicted = list.tail.prev; //remove from tail
+                list.removeNode(evicted);
+                //evict node from the map
+                keyToNodeMap.remove(evicted.key); //important
+               /** optional
+                if (list.size == 0) {
+                    min = 1;
+                } */ 
+            }
+            Node newNode = new Node(key, value);
+            keyToNodeMap.put(key, newNode);
+            keyToDLLMap.computeIfAbsent(1, k -> new DLL()).addToHead(newNode);
+            min = 1; //important
+        }
+
+    }
+}
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache obj = new LFUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
