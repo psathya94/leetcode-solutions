@@ -1,0 +1,154 @@
+//TC - O(S + U × N) s-songs, u-users, n- no.of songs per user
+//SC - O(S + G) G - distinct genres
+package hashmap.favourite.genre;
+import java.util.*;
+
+public class Main {
+
+    public static Map<String, List<String>> favoriteGenre(
+            Map<String, List<String>> userSongs,
+            Map<String, List<String>> songGenres) {
+
+        //step 1:
+        Map<String, String> songToGenreMap = new HashMap<>();
+        Set<String> keys = songGenres.keySet();
+        for(String k:keys){
+            List<String> values = songGenres.get(k);
+            for(String v:values){
+                songToGenreMap.put(v, k);
+            }
+        }
+        System.out.println(songToGenreMap);
+
+        Map<String, List<String>> result = new HashMap<>();
+        //step 2:
+        Map<String, Integer> userToGenreMap;
+        Set<String> users = userSongs.keySet();
+        int max;
+        for(String user: users){
+            List<String> songs = userSongs.get(user);
+            max = 0;
+            userToGenreMap = new HashMap<>();
+            for(String song : songs){
+                String genre = songToGenreMap.get(song);
+                int count = userToGenreMap.getOrDefault(genre,0);
+                count++;
+                userToGenreMap.put(genre,count);
+                max = Math.max(max,count);
+            }
+            //step 3: For each user, userToGenre map is ready and we need to do the step 3 before the loop exits
+            //{Rock=2, Techno=2, Jazz=1}
+            Set<String> userGenrekeys = userToGenreMap.keySet();
+            List<String> outputGenre = new ArrayList<>();
+            for(String g : userGenrekeys){
+                int val = userToGenreMap.get(g);
+                if(val==max){
+                    outputGenre.add(g);
+                }
+            }
+            result.put(user, outputGenre);
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+
+        Map<String, List<String>> userSongs = new HashMap<>();
+
+        userSongs.put("David",
+                Arrays.asList("song1", "song2", "song3", "song4", "song8"));
+
+        userSongs.put("Emma",
+                Arrays.asList("song5", "song6", "song7"));
+
+
+        Map<String, List<String>> songGenres = new HashMap<>();
+
+        songGenres.put("Rock",
+                Arrays.asList("song1", "song3"));
+
+        songGenres.put("Dubstep",
+                Arrays.asList("song7"));
+
+        songGenres.put("Techno",
+                Arrays.asList("song2", "song4"));
+
+        songGenres.put("Pop",
+                Arrays.asList("song5", "song6"));
+
+        songGenres.put("Jazz",
+                Arrays.asList("song8", "song9"));
+
+
+        // Call your method
+        Map<String, List<String>> result =
+                favoriteGenre(userSongs, songGenres);
+
+
+        // Print result
+        System.out.println(result);
+    }
+}
+
+========================================================================================================================
+
+
+package hashmap.favourite.genre;
+import java.util.*;
+
+public class OptimalSolution {
+    public static Map<String, List<String>> favoriteGenre(
+            Map<String, List<String>> userSongs,
+            Map<String, List<String>> songGenres) {
+
+        // Step 1: song -> genre
+        Map<String, String> songToGenreMap = new HashMap<>();
+
+        for (Map.Entry<String, List<String>> entry : songGenres.entrySet()) {
+            String genre = entry.getKey();
+
+            for (String song : entry.getValue()) {
+                songToGenreMap.put(song, genre);
+            }
+        }
+
+        Map<String, List<String>> result = new HashMap<>();
+
+        // Step 2: Process each user
+        for (Map.Entry<String, List<String>> entry : userSongs.entrySet()) {
+
+            String user = entry.getKey();
+            List<String> songs = entry.getValue();
+
+            Map<String, Integer> userToGenreMap = new HashMap<>();
+
+            int max = 0;
+
+            for (String song : songs) {
+
+                String genre = songToGenreMap.get(song);
+
+                int count = userToGenreMap.getOrDefault(genre, 0) + 1;
+
+                userToGenreMap.put(genre, count);
+
+                max = Math.max(max, count);
+            }
+
+            // Step 3: Find all genres with maximum count
+            List<String> favoriteGenres = new ArrayList<>();
+
+            for (Map.Entry<String, Integer> genreEntry : userToGenreMap.entrySet()) {
+
+                if (genreEntry.getValue() == max) {
+                    favoriteGenres.add(genreEntry.getKey());
+                }
+            }
+
+            result.put(user, favoriteGenres);
+        }
+
+        return result;
+    }
+}
