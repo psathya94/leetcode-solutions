@@ -1,0 +1,23 @@
+//TC - O(n)
+//SC - O(1)
+class Solution {
+    public double calculateTax(int[][] brackets, int income) {
+        double remaining_amount = income;
+        double taxable_amount = 0.0;
+        int previous_limit = 0;
+        for (int[] bracket : brackets) {//[3,50]
+            int currentbracket = bracket[0] - previous_limit; //calculate the current tax bracket
+            if (remaining_amount >= currentbracket) {
+                taxable_amount += currentbracket * bracket[1] / 100.0; //don't forget to add 100.0
+                remaining_amount = remaining_amount - currentbracket;
+            } else {
+                taxable_amount += remaining_amount * bracket[1] / 100.0;
+                remaining_amount = 0.0;
+                break;
+            }
+            System.out.println(taxable_amount + " " + remaining_amount);
+            previous_limit = bracket[0]; //current bracket is saved to calculate the range for next iteration
+        }
+        return taxable_amount;
+    }
+}
