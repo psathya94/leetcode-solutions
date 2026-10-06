@@ -1,0 +1,24 @@
+//TC - O(n)
+//SC - O(1)
+class Solution {
+    public int minDominoRotations(int[] tops, int[] bottoms) {
+        int x = search(tops, bottoms, tops[0]);
+        if (x != -1) //if x is not -1, that means top[0] was present either on the top or bottom row during every iteration. Hence this is the answer. we dont need to check with bottoms[0], even when bottoms[0] can be the possible answer, it will also have same min no of rotations as top[0]
+            return x;
+        return search(tops, bottoms, bottoms[0]);
+    }
+
+    public int search(int[] tops, int[] bottoms, int target) {
+        int topCount = 0;
+        int bottomCount = 0;
+        for (int i = 0; i < tops.length; i++) {
+            if (tops[i] != target && bottoms[i] != target)
+                return -1;
+            else if (bottoms[i] != target)
+                bottomCount++;
+            else if (tops[i] != target)
+                topCount++;
+        }
+        return Math.min(topCount, bottomCount);
+    }
+}
