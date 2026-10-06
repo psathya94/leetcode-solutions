@@ -1,0 +1,60 @@
+package CampusBikes;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+//TC - O(N × M)
+//SC - O(N × M)
+public class Solution {
+
+    public int[] assignBikes(int[][] workers, int[][] bikes) {
+
+        HashMap<Integer, List<int []>> map = new HashMap<>();
+        //need min and max for bucket sort
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        // Generate all worker-bike pairs
+        for(int i=0;i< workers.length;i++){
+            for(int j=0;j< bikes.length;j++){
+                int dist = calculateDistance(workers[i],bikes[j]);
+                map.computeIfAbsent(dist, k->new ArrayList<>()).add(new int[]{i,j}); //w,b
+                min = Math.min(min,dist);
+                max = Math.max(dist, max);
+            }
+        }
+
+        //now we have distance to w,b mapping in hashmap
+        //start the assignment
+        boolean[] worker = new boolean[workers.length];
+        boolean[] bike = new boolean[bikes.length];
+        int[] mapping = new int[workers.length]; //worker is at index
+        int count =0;
+
+        for(int idx = min; idx<=max;idx++){
+            List<int []> list = map.get(idx);
+            if(list==null) //map.get(idx) returns null because that distance may not exist as a key
+                continue;
+            for(int[] wb: list){
+                int w = wb[0];
+                int b = wb[1];
+                if(!worker[w] && !bike[b]){ //both worker and bike is not assigned yet
+                    worker[w] = true;
+                    bike[b] = true;
+                    mapping[w] =b;  // IMPORTANT
+                    count++;
+                }
+                if(count==workers.length)
+                    return mapping;
+            }
+        }
+
+        return mapping;
+    }
+
+    private int calculateDistance(int[] worker, int[] bike) {
+
+        return Math.abs(worker[0]-bike[0])+Math.abs(worker[1]-bike[1]);
+    }
+}
