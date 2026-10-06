@@ -1,0 +1,51 @@
+package shortest.way.to.form.string;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+//TC - O(S + T log S)
+//SC - O(S)
+public class Solution {
+
+    public int shortestWay(String source, String target) {
+        if (target.isEmpty()) {
+            return 0;
+        }
+        HashMap<Character, List<Integer>> map = new HashMap<>();
+
+        for (int i = 0; i < source.length(); i++) {
+            char c = source.charAt(i);
+            map.computeIfAbsent(c, k -> new ArrayList<>()).add(i);
+        }
+
+        //two pointer approach
+        int i = 0;
+        int j = 0;
+        int iteration = 1;
+        while (j < target.length()) {
+            char t = target.charAt(j);
+
+            if (!map.containsKey(t))
+                return -1; //if key is not present in map, return immediately
+
+            List<Integer> list = map.get(t);
+            int pos = Collections.binarySearch(list, i); //we have the list, so we're trying find an index >= i
+            if (pos >= 0) {     // Exact occurrence or index found
+                i = list.get(pos);
+            } else {
+                int insertionPoint = -pos - 1; // Convert negative result to insertion point, check docs
+                if (insertionPoint == list.size()) {
+                    i = list.get(0);
+                    iteration++;  // Start a new subsequence
+                } else {
+                    i = list.get(insertionPoint);  // Found first occurrence > i
+                }
+            }
+            i++;
+            j++;
+        }
+        return iteration;
+    }
+}
