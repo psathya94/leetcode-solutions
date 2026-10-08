@@ -1,0 +1,30 @@
+/**
+TC: O(n)
+SC: O(n)
+ */
+class Solution {
+    public int nthUglyNumber(int n) {
+        int[] ugly = new int[n];
+        ugly[0] = 1;
+        int p2 = 0; //index
+        int p3 = 0; //index
+        int p5 = 0; //index
+        for (int i = 1; i < n; i++) {
+            int n2 = ugly[p2] * 2;
+            int n3 = ugly[p3] * 3;
+            int n5 = ugly[p5] * 5;
+
+            int num = Math.min(n2, Math.min(n3, n5));
+            ugly[i] = num;
+            // Use independent if statements
+            if (num == n2)
+                p2++;
+            if (num == n3)
+                p3++;
+            if (num == n5)
+                p5++;
+        }
+
+        return ugly[n - 1];
+    }
+}
