@@ -1,6 +1,4 @@
 
-
-
 /**
 * Definition for a binary tree node.
 * public class TreeNode {
@@ -38,21 +36,6 @@ class Solution {
 }
 ===========
 Approach 2: Post-order; same sum is used across all the calls, so prefer approach 1 (check google notes)
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
 //TC - O(n)
 //SC - O(h)
 class Solution {
@@ -74,5 +57,30 @@ class Solution {
             dfs(root.right, low, high);
 
         return sum;
+    }
+}
+=======
+Approach 3: void based- correct solution
+//TC - O(n)
+//SC - O(h)
+class Solution {
+    int sum;
+
+    public int rangeSumBST(TreeNode root, int low, int high) {
+        sum = 0;
+         dfs(root, low, high);
+         return sum;
+    }
+
+    private void dfs(TreeNode root, int low, int high) {
+        if (root == null) {
+            return;
+        }
+        if (root.val >= low && root.val <= high)
+            sum += root.val;
+        if (root.val > low)
+            dfs(root.left, low, high);
+        if (root.val < high)
+            dfs(root.right, low, high);
     }
 }
