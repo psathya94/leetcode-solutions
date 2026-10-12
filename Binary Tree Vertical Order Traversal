@@ -127,9 +127,9 @@ public class DFS_Solution {
         map.computeIfAbsent(width, k->new ArrayList<>()).add(new int[]{root.val, level});
         min = Math.min(min,width);
         max = Math.max(max, width);
-        if(root.left!=null)
+        //if(root.left!=null) - not needed, handled at base case
             dfs(root.left, width-1, level+1,map);
-        if(root.right!=null)
+        //if(root.right!=null)
             dfs(root.right, width+1, level+1,map);
     }
 }
