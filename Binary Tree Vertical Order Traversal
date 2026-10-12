@@ -97,3 +97,39 @@ public class Main1 {
         System.out.println(result);
     }
 }
+==========================================================================================
+package trees.vertical.order.traversal;
+
+import java.util.*;
+//Time: (O(N log N)) worst case due to sorting.
+//Space: (O(N)) auxiliary space, including the map and recursion stack.
+public class DFS_Solution {
+    int min =0; //should be global
+    int max=0;
+    public List<List<Integer>> verticalOrder(Main1.TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        if(root==null)
+            return result;
+        HashMap<Integer, List<int[]>> map = new HashMap<>();
+
+        dfs(root,0,0,map);
+        for(int i=min;i<=max;i++){
+            List<int[]> list = map.get(i);
+            list.sort((a, b) -> Integer.compare(a[1], b[1]));
+            List<Integer> l = list.stream().map(j->j[0]).toList();
+            result.add(l);
+        }
+        return result;
+    }
+    private void dfs(Main1.TreeNode root, int width, int level, HashMap<Integer, List<int[]>> map){
+        if(root==null)
+            return ;
+        map.computeIfAbsent(width, k->new ArrayList<>()).add(new int[]{root.val, level});
+        min = Math.min(min,width);
+        max = Math.max(max, width);
+        if(root.left!=null)
+            dfs(root.left, width-1, level+1,map);
+        if(root.right!=null)
+            dfs(root.right, width+1, level+1,map);
+    }
+}
