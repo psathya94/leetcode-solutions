@@ -1,0 +1,99 @@
+BFS approach
+
+package trees.vertical.order.traversal;
+
+import java.util.*;
+//TC:O(N)
+//SC:O(N)
+public class Main1 {
+
+    // TreeNode definition
+    static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+    }
+
+    // Your solution
+    static class Solution {
+
+        public List<List<Integer>> verticalOrder(Main1.TreeNode root) {
+            List<List<Integer>> result = new ArrayList<>();
+            if(root==null)
+                return result;
+
+            Queue<Main1.TreeNode> queue = new LinkedList<>();
+            Queue<Integer> widthqueue = new LinkedList<>();
+            HashMap<Integer, List<Integer>> map = new HashMap<>();
+
+            queue.offer(root);
+            widthqueue.offer(0);
+            int min = 0;
+            int max = 0;
+
+            while(!queue.isEmpty()){
+                Main1.TreeNode curr = queue.poll();
+                int width = widthqueue.poll();
+                min = Math.min(min, width);
+                max = Math.max(max, width);
+                map.computeIfAbsent(width, k->new ArrayList<>()).add(curr.val);
+
+                //add the left and right child of curr to queue
+                Main1.TreeNode left = curr.left;
+                if(left!=null){
+                    queue.offer(left);
+                    widthqueue.offer(width-1);
+                }
+
+                Main1.TreeNode right = curr.right;
+                if(right!=null){
+                    queue.offer(right);
+                    widthqueue.offer(width+1);
+                }
+            }
+            //iterate the map
+            for(int i=min;i<=max;i++){
+                List<Integer> list = map.get(i);
+                //not necessary for this problem
+//                if(list==null){
+//                    continue;
+//                }
+                result.add(list);
+            }
+
+            return result;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        /*
+                 3
+                / \
+               9   20
+                  /  \
+                 15   7
+
+        Expected:
+        [[9], [3, 15], [20], [7]]
+        */
+
+        TreeNode root = new TreeNode(3);
+
+        root.left = new TreeNode(9);
+        root.right = new TreeNode(20);
+
+        root.right.left = new TreeNode(15);
+        root.right.right = new TreeNode(7);
+
+        Solution solution = new Solution();
+
+        List<List<Integer>> result = solution.verticalOrder(root);
+
+        System.out.println(result);
+    }
+}
