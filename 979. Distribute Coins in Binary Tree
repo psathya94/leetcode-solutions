@@ -35,3 +35,6 @@ class Solution {
         return extra;
     }
 }
+/**
+ * At each node, we return the no.of extra or deficit coins to the parent. The returned extra is equal to the no of moves
+ */
