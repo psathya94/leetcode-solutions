@@ -26,4 +26,40 @@
     }
 
 ==============================================================================
-
+//DFS void based
+public class Solution {
+    int result;
+    public int depthSum(List<NestedInteger> nestedList) {
+        result = 0;
+         dfs(nestedList, 1);
+        return result;
+    }
+    private void dfs(List<NestedInteger> nestedList, int depth) {
+        for(NestedInteger n:nestedList){ //[1,1],2,[1,1] - 3 elements
+            if(n.isInteger()){
+                result += n.getInteger() * depth;
+            }else{
+                dfs(n.getList(), depth+1);
+            }
+        }
+    }
+}
+==============================================================================
+//DFS int based
+public class Solution {
+   
+    public int depthSum(List<NestedInteger> nestedList) {
+        return dfs(nestedList, 1);
+    }
+    private int dfs(List<NestedInteger> nestedList, int depth) {
+        int result = 0;
+        for (NestedInteger n : nestedList) { //[1,1],2,[1,1] - 3 elements
+            if (n.isInteger()) {
+                result += n.getInteger() * depth;
+            } else {
+                result += dfs(n.getList(), depth + 1);
+            }
+        }
+        return result;
+    }
+}
