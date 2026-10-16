@@ -1,0 +1,30 @@
+Brute force
+//TC - O(n^2)
+//SC - O(1)
+class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices.length < 2 || prices == null)
+            return 0;
+        int result = 0;
+        int n = prices.length;
+        for (int i = 0; i < n; i++) { // 1,2,3,4,8
+            int firstPartition = helper(prices, 0, i);
+            int secondPartition = helper(prices, i + 1, n - 1);
+            System.out.println(firstPartition + " "+ secondPartition);
+            result = Math.max(result, firstPartition + secondPartition);
+        }
+        return result;
+    }
+
+    public int helper(int[] prices, int start, int end) {
+        int maxProfit = 0;
+        int buy = Integer.MAX_VALUE; //important
+        int currentProfit = 0;
+        for (int i = start; i <= end; i++) {
+            currentProfit = prices[i] - buy;
+            maxProfit = Math.max(maxProfit, currentProfit);
+            buy = Math.min(buy, prices[i]);
+        }
+        return maxProfit;
+    }
+}
