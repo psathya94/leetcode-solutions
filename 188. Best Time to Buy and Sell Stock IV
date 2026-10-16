@@ -1,0 +1,23 @@
+//TC: O(nk)
+//SC - O(k)
+class Solution {
+    public int maxProfit(int k, int[] prices) {
+        int n = prices.length;
+        int[] buy = new int[k+1];
+        int[] sell = new int[k+1];
+        Arrays.fill(buy, Integer.MAX_VALUE);
+        //Arrays.fill(sell, Integer.MIN_VALUE); sell should be 0
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 1; j <= k; j++) {
+                buy[j] = Math.min(buy[j], prices[i] - sell[j - 1]); //min buy
+                sell[j] = Math.max(sell[j], prices[i] - buy[j]);
+            }
+        }
+        return sell[k];
+    }
+}
+
+==================================================================
+If k>=n/2, use Best Time to Buy and Sell Stock II solution
+
