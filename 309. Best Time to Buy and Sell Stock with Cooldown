@@ -1,0 +1,20 @@
+//TC - O(n)
+//SC - O(n)
+class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length < 2)
+            return 0;
+        int n = prices.length;
+        int[] buydp = new int[n];
+        int[] selldp = new int[n];
+        buydp[0] = -prices[0];
+        selldp[0] = 0;
+        buydp[1] = Math.max(buydp[0], -prices[1]);
+        selldp[1] = Math.max(selldp[0], buydp[1] + prices[1]);
+        for (int i = 2; i < n; i++) {
+            buydp[i] = Math.max(buydp[i - 1], selldp[i - 2] - prices[i]);
+            selldp[i] = Math.max(selldp[i - 1], buydp[i - 1] + prices[i]);
+        }
+        return selldp[n-1];
+    }
+}
