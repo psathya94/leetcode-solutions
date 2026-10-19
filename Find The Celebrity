@@ -1,0 +1,40 @@
+
+package find.celebrity;
+
+//TC - O(n)
+//SC - O(1)
+public class Solution {
+
+    // Simulates LeetCode's knows(a, b) API.
+    // Main.java provides the relationship matrix.
+    private final int[][] matrix;
+
+    public Solution(int[][] matrix) {
+        this.matrix = matrix;
+    }
+
+    private boolean knows(int a, int b) {
+        return matrix[a][b] == 1;
+    }
+
+    public int findCelebrity(int n) {
+        if (n <= 0) {
+            return -1;
+        }
+        int celeb = 0;
+
+        for (int i = 1; i < n; i++) {
+            if (knows(celeb, i))
+                celeb = i;
+        }
+        for (int i = 0; i < n; i++) {
+            if (i == celeb)
+                continue;
+            if (knows(celeb, i))
+                return -1;
+            if (!knows(i, celeb))
+                return -1;
+        }
+        return celeb;
+    }
+}
