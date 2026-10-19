@@ -1,39 +1,33 @@
-//use examples - hello and leetcode, apple and app
-//TC - O(N*l)
+//TC - O(O+N*L) whre n is no of words and l is the length of every word
 //SC - O(1)
 class Solution {
     public boolean isAlienSorted(String[] words, String order) {
         HashMap<Character, Integer> map = new HashMap<>();
         for (int i = 0; i < order.length(); i++) {
-            Character c = order.charAt(i);
+            char c = order.charAt(i);
             map.put(c, i);
         }
+
         for (int i = 1; i < words.length; i++) {
             String s1 = words[i - 1];
             String s2 = words[i];
-            boolean flag = inOrder(s1,s2,map);
-            if(!flag)
-                return false;
-            
+            int len1 = s1.length();
+            int len2 = s2.length();
+            int len = Math.min(len1, len2);
+            for (int j = 0; j < len; j++) {
+                if (s1.charAt(j) != s2.charAt(j)) {
+                    if (map.get(s1.charAt(j)) > map.get(s2.charAt(j)))
+                        return false;
+                    else
+                        break;
+                }
+            }
+            //apple,app
+            if (len1 > len2) {
+                if (s1.startsWith(s2))
+                    return false;
+            }
         }
         return true;
     }
-    private boolean inOrder(String s1, String s2, HashMap<Character, Integer> map){
-            for (int j = 0; j < s1.length() && j < s2.length(); j++) {
-                char c1 = s1.charAt(j);
-                char c2 = s2.charAt(j);
-                if (c1 != c2) { 
-                    if (map.get(c2) < map.get(c1))
-                        return false;
-                    else
-                        return true;
-                }
-            }
-//when all characters are matched eg: apple and app, we return false as app should come before apple
-            if (s1.length() > s2.length())
-                return false;
-
-            return true;
-    }
 }
-//when we have 2 words wrt and wrfz --> only the first differing character determines the order. w,r,z can be in any order but t comes before f
