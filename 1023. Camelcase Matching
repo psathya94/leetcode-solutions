@@ -1,0 +1,48 @@
+//TC - O(N*(q+p)), q= query length and p= pattern length
+//SC - O(1) auxiliary
+
+class Solution {
+    public List<Boolean> camelMatch(String[] queries, String pattern) {
+        List<Boolean> result = new ArrayList<>();
+        for (String word : queries) {
+            boolean ans = helper(word, pattern);
+            result.add(ans);
+        }
+        return result;
+    }
+
+    private boolean helper(String word, String pattern) {
+        int len1 = word.length();
+        int len2 = pattern.length();
+
+        int j = 0;
+        int i = 0;
+        while (i < len1 && j < len2) {
+            char c1 = word.charAt(i);
+            char c2 = pattern.charAt(j);
+            if (c1 != c2) {
+                if (Character.isLowerCase(c1)) {
+                    i++;
+                    continue;
+                } else
+                    return false;
+            }
+            i++;
+            j++;
+        }
+        while (i < len1) {    
+            //word len is greater than pattern
+            char c = word.charAt(i);
+            if (Character.isLowerCase(c))
+                i++;
+            else
+                return false;
+        }
+        //if pattern string remains
+        if (j < len2) {
+            return false;
+        }
+        return true;
+
+    }
+}
