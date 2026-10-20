@@ -1,73 +1,74 @@
 // TC: O(C), where C = total number of characters in all words
 // SC: O(1) because the alphabet has at most 26 characters
-class Solution {
+
+package alien.dictionary;
+
+import java.util.*;
+//TC : (O(C+V+E))
+// (C) be the total number of characters across all words, U the number of unique characters, and E the number of graph edges.
+//In this problem, V<=26 and E is finite so the TC simplifies to O(C)
+//SC : (O(V+E))
+public class Solution {
+    //"wrt", "wrf", "er", "ett", "rftt"
+    //"zxy", "zxw", "ab", "a"
     public String alienOrder(String[] words) {
+        //1.Identify the nodes, Build graph
         HashMap<Character, Set<Character>> map = new HashMap<>();
         int[] indegree = new int[26];
-
-        // Add all characters
-        for (String word : words) {
-            for (char c : word.toCharArray()) {
+        //Add all characters to map (node)
+        for (int i = 0; i < words.length; i++) {
+            for(char c:words[i].toCharArray()){
                 map.putIfAbsent(c, new HashSet<>());
             }
+            if(map.size()==26)
+                break;
         }
-
-        // Build graph
+        //Add the edges
+        //Compare the words and add the dependencies to the map
         for (int i = 1; i < words.length; i++) {
             String s1 = words[i - 1];
             String s2 = words[i];
-            boolean flag = false;
-
-            for (int j = 0; j < s1.length() && j < s2.length(); j++) {
-                char c1 = s1.charAt(j);
-                char c2 = s2.charAt(j);
-
-                if (c1 != c2) {
-                    Set<Character> set = map.get(c1);
-
-                    if (!set.contains(c2)) {
-                        set.add(c2);
-                        indegree[c2 - 'a']++;
-                    }
-
-                    flag = true;
-                    break;
+            int len1 = s1.length();
+            int len2 = s2.length();
+            int len = Math.min(len1, len2);
+            for (int j = 0; j < len; j++) {
+                char from = s1.charAt(j);
+                char to = s2.charAt(j);
+                if (from != to) {
+                    if(map.get(from).add(to)) //important- add returns true if new edge is added or false for duplicate edges
+                        indegree[to -'a']++;
+                    break; //important. we break once the first constraint is found. eg- wrfa wrtc we break at f and t comparison and dont need to compare a and c
                 }
             }
-
-            // Invalid prefix: "apple" before "app"
-            if (!flag && s1.length() > s2.length()) {
-                return "";
+            //apple,app - not lexicographically sorted, invalid input
+            if (len1 > len2) {
+                if (s1.startsWith(s2))
+                    return "";
             }
         }
-
-        // BFS / Topological Sort
+        //2.BFS
+        Queue<Character> q = new LinkedList<>();
+        Set<Character> keys = map.keySet();
+        for(char key:keys){
+            if(indegree[key-'a']==0)
+                q.offer(key);
+        }
         StringBuilder sb = new StringBuilder();
-        Queue<Character> queue = new ArrayDeque<>();
-
-        for (char ch : map.keySet()) {
-            if (indegree[ch - 'a'] == 0) {
-                queue.offer(ch);
+        while(!q.isEmpty()){
+            char out = q.poll();
+            sb.append(out);
+            Set<Character> nodes = map.get(out);
+            for(char c: nodes){
+                indegree[c-'a']--;
+                if(indegree[c-'a']==0)
+                    q.offer(c);
             }
         }
+        if(sb.length()!=map.size())
+            return "";
+        return sb.toString();
 
-        int count = 0;
-
-        while (!queue.isEmpty()) {
-            char c = queue.poll();
-            count++;
-            sb.append(c);
-
-            for (char child : map.get(c)) {
-                indegree[child - 'a']--;
-
-                if (indegree[child - 'a'] == 0) {
-                    queue.offer(child);
-                }
-            }
-        }
-
-        // Cycle -> invalid ordering
-        return count == map.size() ? sb.toString() : "";
+        //return sb.length()!=map.size() ? "": sb.toString();
     }
 }
+
