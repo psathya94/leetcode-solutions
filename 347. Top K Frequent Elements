@@ -1,0 +1,37 @@
+//TC - O(n+u+k) simplified to O(n)
+//SC - O(n) auxiliary
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i : nums) {  //O(n)
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+        Map<Integer, List<Integer>> countMap = new HashMap<>();
+        Set<Integer> set = map.keySet();
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        for (int key : set) { //O(u)
+            int count = map.get(key);
+            countMap.computeIfAbsent(count, c->new ArrayList<>()).add(key);
+            min = Math.min(min, count);
+            max = Math.max(max, count);
+        }
+
+        int[] result = new int[k];
+        int idx = 0;
+        while (k > 0 && max >= min) { //O(k)
+                List<Integer> element = countMap.get(max);
+                if (element != null) {
+                    for(int e: element){
+                        result[idx] = e;
+                        k--;
+                        idx++;
+                    if(k==0)
+                        break;
+                    }
+                }
+            max--;
+        }
+        return result;
+    }
+}
