@@ -35,3 +35,29 @@ class Solution {
         return result;
     }
 }
+=============================================================================================================================
+//TC - O(n+ u log k)
+//SC - O(n + k) auxiliary
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i : nums) { //O(n)
+            map.put(i, map.getOrDefault(i, 0) + 1);
+        }
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1])); //eg-> (1,4) minheap
+
+        for (int key : map.keySet()) { //O(u)
+            int count = map.get(key);
+            minHeap.offer(new int[] { key, count });//O(log k)
+            while (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+        //O(k log k)
+        int[] result = new int[k];
+        for (int i = 0; i < k; i++) {
+            result[i] = minHeap.poll()[0];
+        }
+        return result;
+    }
+}
