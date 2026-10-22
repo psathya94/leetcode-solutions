@@ -1,0 +1,31 @@
+//TC - O(n log n * L) n log n for java sorting, L for comparison
+//SC - O(L) for the temp string array created during comparison
+class Solution {
+    public String[] reorderLogFiles(String[] logs) {
+
+        Arrays.sort(logs, (x, y) -> {
+            String[] a = x.split(" ", 2);//a[0] = identifier, a[1] = content
+            String[] b = y.split(" ", 2);
+
+            char c1 = a[1].charAt(0);
+            char c2 = b[1].charAt(0);
+
+            if (!Character.isDigit(c1) && !Character.isDigit(c2)) {
+                //case 1: letter log, letter log
+                //we use compareTo as we're comparing String, use Integer.compare for Integer
+                int result = a[1].compareTo(b[1]);
+                //content is not same, return +ve or -ve value returned from comparator
+                if (result != 0)
+                    return result;
+                return a[0].compareTo(b[0]); //ascending
+            } else if (!Character.isDigit(c1) && Character.isDigit(c2)) { //case 2: letter log, digit log
+                return -1;
+            } else if (Character.isDigit(c1) && !Character.isDigit(c2)) { //case 3: digit log, letter log
+                return 1;
+            } else {
+                return 0; //case 4: digit log, digit log
+            }
+        });
+        return logs;
+    }
+}
