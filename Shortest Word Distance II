@@ -1,0 +1,41 @@
+package shortest.word.distance.ii;
+
+import java.util.*;
+/**
+ * Time Complexity:
+ * O(n) to build the map + O(k1 + k2) for each query.
+ *
+ * Space Complexity:
+ * O(n) — to store all indices in the map
+ */
+public class WordDistance {
+    Map<String, List<Integer>> map;
+
+    public WordDistance(String[] wordsDict) {
+        map = new HashMap<>();
+        for (int i = 0; i < wordsDict.length; i++) { //O(n)
+            String s = wordsDict[i];
+            map.computeIfAbsent(s, k -> new ArrayList<>()).add(i);
+        }
+    }
+
+    public int shortest(String word1, String word2) { //O(k1+k2)
+        List<Integer> list1 = map.get(word1); //O(k1)
+        List<Integer> list2 = map.get(word2); //O(k2)
+        int result = Integer.MAX_VALUE;
+        
+        int p1 = 0;
+        int p2 = 0;
+        while (p1 < list1.size() && p2 < list2.size()) {
+            int i1 = list1.get(p1);
+            int i2 = list2.get(p2);
+            result = Math.min(result, Math.abs(i1 - i2));
+            if (i1 < i2) {
+                p1++;
+            } else {
+                p2++;
+            }
+        }
+        return result;
+    }
+}
