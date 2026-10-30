@@ -1,0 +1,36 @@
+class Solution {
+    public int shipWithinDays(int[] weights, int days) {
+        int minSize = 0;
+        int maxSize = 0;
+        for (int w : weights) {
+            minSize = Math.max(minSize, w);
+            maxSize += w;
+        }
+        //binary search to find the correct size that ships in given days
+        int low = minSize;
+        int high = maxSize;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            //using the mid, calculate the days taken to ship
+            int capacity = 0;
+            int no_of_days = 1;
+            for (int i = 0; i < weights.length; i++) {
+                if (capacity + weights[i] <= mid) {
+                    capacity = capacity + weights[i];
+                } else {
+                    capacity = weights[i];
+                    no_of_days++;
+                }
+            }
+
+            if (no_of_days <= days) {
+                high = mid - 1;
+
+            } else {
+                low = mid + 1;
+            }
+            
+        }
+        return low;
+    }
+}
