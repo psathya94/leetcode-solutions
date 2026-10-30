@@ -1,0 +1,50 @@
+//TC - O()
+class TopVotedCandidate {
+    HashMap<Integer, Integer> voteCount;
+    HashMap<Integer, Integer> leaderMap;
+    int[] time;
+
+    public TopVotedCandidate(int[] persons, int[] times) { //TC - O(n)
+        voteCount = new HashMap<>(); //person, count
+        leaderMap = new HashMap<>(); //time, leader
+        time = times; //need this for binary search
+
+        int n = persons.length;
+        int max = -1;
+        int leader = -1;
+        for (int i = 0; i < n; i++) {
+            int p = persons[i];
+            int t = times[i];
+            voteCount.put(p, voteCount.getOrDefault(p, 0) + 1);
+            int count = voteCount.get(p);
+            if (count >= max) {
+                max = count;
+                leader = p;
+            }
+            leaderMap.put(t, leader);
+        }
+    }
+
+    public int q(int t) { //TC - O(log n)
+        if (leaderMap.containsKey(t))
+            return leaderMap.get(t);
+        //binary search on time array
+        int low = 0;
+        int high = time.length - 1;
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (time[mid] > t) { //rememeber it should be time[mid]
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return leaderMap.get(time[high]);//rememeber it should be time[high] as high lands on thr right time
+    }
+}
+
+/**
+ * Your TopVotedCandidate object will be instantiated and called as such:
+ * TopVotedCandidate obj = new TopVotedCandidate(persons, times);
+ * int param_1 = obj.q(t);
+ */
