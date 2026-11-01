@@ -18,3 +18,26 @@ class Solution {
         return selldp[n-1];
     }
 }
+========================================
+//TC - O(n)
+//SC - O(1)
+class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length < 2)
+            return 0;
+
+        int prev_buy = -prices[0];
+        int prev_sell = 0; 
+        int curr_buy = Math.max(-prices[0], -prices[1]); 
+        int curr_sell = Math.max(prev_sell, prev_buy + prices[1]);
+
+        for (int i = 2; i < prices.length; i++) {
+            int buy = Math.max(curr_buy, prev_sell-prices[i]);
+            int sell = Math.max(curr_sell, curr_buy+prices[i]);
+            prev_sell = curr_sell;
+            curr_sell = sell;
+            curr_buy = buy;
+        }
+        return curr_sell;
+    }
+}
