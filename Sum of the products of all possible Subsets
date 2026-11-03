@@ -1,0 +1,19 @@
+package sum.of.product.of.subsets;
+//TC - O(n)
+//SC - O(1)
+public class ProductOfSubsetSums { //eg = 1,2,3 ans - 23
+    public static void main(String[] args) {
+        int arr[] = {1, 2, 3};
+        int n = arr.length;
+        System.out.println("HI");
+        System.out.println(productOfSubsetSums(arr, n));
+    }
+
+    private static int productOfSubsetSums(int[] arr, int n) {
+        int result = 1; //initiate with 1
+        for (int i : arr) {
+            result = result * (i + 1);
+        }
+        return result - 1;
+    }
+}
