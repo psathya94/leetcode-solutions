@@ -1,0 +1,17 @@
+//TC - log(target) at every step the target is decreased by 2
+//SC - O(1)
+class Solution {
+    public int brokenCalc(int startValue, int target) {
+        int steps =0;
+        while (target > startValue) {
+            if (target % 2 == 0) //even
+                target = target / 2;
+            else
+                target = target + 1;
+
+            steps++;
+        }
+        return steps+(startValue-target);
+    }
+} 
+//other approach - bfs
