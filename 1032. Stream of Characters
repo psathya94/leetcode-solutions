@@ -1,0 +1,61 @@
+//TC - O(N * L) for tries + O(K) for each query
+//SC - O(N * L) + O(K)
+class StreamChecker {
+
+    class TrieNode {
+        TrieNode[] children;
+        boolean isEnd;
+
+        public TrieNode() {
+            children = new TrieNode[26];
+            isEnd = false;
+        }
+    }
+    TrieNode root;
+    int maxLength;
+    StringBuilder sb;
+
+    public StreamChecker(String[] words) {
+        root = new TrieNode();
+        sb = new StringBuilder();
+        for (String word : words) {
+            maxLength = Math.max(maxLength,word.length()); //optimization
+            TrieNode curr = root;
+            for (int i = word.length() - 1; i >= 0; i--) { //bat --> tab
+                char c = word.charAt(i);
+                if (curr.children[c - 'a'] == null) {
+                    curr.children[c - 'a'] = new TrieNode();
+                }
+                curr = curr.children[c - 'a'];
+            }
+            curr.isEnd = true;
+        }
+    }
+
+    public boolean query(char letter) {
+        sb.append(letter);
+        if(sb.length() > maxLength) //optimization
+            sb.deleteCharAt(0);
+        return search(sb.toString());
+    }
+    public boolean search(String word) {
+        TrieNode curr = root;
+        for (int i = word.length() - 1; i >= 0; i--) { //bat --> tab
+        char c = word.charAt(i);
+        TrieNode child = curr.children[c - 'a'];
+            if (child == null) {
+                return false;
+            }else if(child.isEnd){
+                return true;
+            }
+            curr = child;
+        }
+        return false;
+    }
+}
+
+/**
+ * Your StreamChecker object will be instantiated and called as such:
+ * StreamChecker obj = new StreamChecker(words);
+ * boolean param_1 = obj.query(letter);
+ */
