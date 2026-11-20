@@ -1,3 +1,62 @@
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int cell = 1;
+        //go over each cell. when any cell is 0, update its 0th row and 0th col to 0 as a marker except for first col
+        //for 0th column, never update 0th row to 0, instead have an extra cell
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    if (j == 0)
+                        cell = 0;
+                    matrix[i][0] = 0;
+
+                    if (j != 0)
+                        matrix[0][j] = 0;
+                }
+
+            }
+        }
+        //step 2 - go over columns from 1 to n and set the rows to zero. col 0 is skipped for now
+        int r = 0;
+        for (int j = 1; j < n; j++) {
+            if (matrix[r][j] == 0) {
+                //set all rows to zero
+                for (int i = 1; i < m; i++) {
+                    matrix[i][j] = 0;
+                }
+            }
+
+        }
+         //step 3 - go over rows from 1 to n and set the col to zero. row 0 is skipped for now
+        int c = 0;
+        for (int i = 1; i < m; i++) {
+
+            if (matrix[i][c] == 0) {
+                //set all rows to zero
+                for (int j = 1; j < n; j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+
+        }
+        //step 4 - check row 0
+        if (matrix[0][0] == 0) {
+            for (int j = 1; j < n; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+        //step 4 - check col 0
+        if (cell == 0) {
+            for (int i = 0; i < m; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+}
+=========================
+
 //TC - O(m*n)
 //SC - O(1)
 class Solution {
